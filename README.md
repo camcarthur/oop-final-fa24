@@ -1,2 +1,16 @@
-# oop-final-fa24
-OOP final project for Colin McArthur, Jake Peterson, and Carlos Ortiz
+# Object Oriented Programming - Final
+
+## Group Members
+Colin McArthur, Jake Peterson, and Carlos Ortiz
+
+## Description
+For our project we are going create a psuedo bank website that has functionality to track multiple
+users with individual accounts.
+
+## How to Run
+```hold```
+
+
+## How to Test
+
+```hold```
