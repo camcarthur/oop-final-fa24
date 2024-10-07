@@ -1,0 +1,14 @@
+This project is an online banking website developed to handle banking operations, such as account management, 
+fund transfers, and transaction history retrieval. The website features secure user login, encrypted password storage, 
+and logs to track account activity. The primary objective is to create a secure/user-friendly platform where users 
+can perform mock banking tasks while following security practices for the safety of sensitive information.
+
+The development follows object-oriented programming principles like encapsulation, polymorphism, and 
+inheritance. The system features a frontend application that works with a backend database to store user data, 
+balances, and logs. The platform will support multiple accounts, including checking and savings accounts, 
+for each user via the accounts UUID. Additional features would be encrypted login, password protection, 
+and account modification, allowing users to change personal information like passwords and names.
+
+Key features include the ability to withdraw, deposit, and wire funds between accounts, along with support for 
+personal account management. The project demonstrates OOP principles in a real-world banking context, providing 
+a robust design that meets course and project requirements.
