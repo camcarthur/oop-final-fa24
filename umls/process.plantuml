@@ -1,0 +1,17 @@
+@startuml
+start
+:User logs in;
+:Authenticate user;
+:Select source account;
+:Select destination account;
+:Input transfer amount;
+if (Sufficient funds?) then (yes)
+    :Transfer amount;
+    :Update source and destination account balances;
+    :Log transaction;
+else (no)
+    :Display error message;
+endif
+:Logout;
+stop
+@enduml
