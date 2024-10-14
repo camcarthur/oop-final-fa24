@@ -1,0 +1,11 @@
+@startuml
+actor User
+actor Admin
+
+User --> (Login)
+User --> (Manage Account)
+User --> (Transfer Funds)
+User --> (View Transaction History)
+
+Admin --> (View Logs)
+@enduml

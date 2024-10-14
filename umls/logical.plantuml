@@ -1,0 +1,27 @@
+@startuml
+class User {
+    +UUID id
+    +String name
+    +String password
+    +authenticate()
+    +updateProfile()
+}
+
+class Account {
+    +UUID accountId
+    +double balance
+    +withdraw(amount)
+    +deposit(amount)
+    +transferFunds(toAccount, amount)
+}
+
+class Transaction {
+    +UUID transactionId
+    +date timestamp
+    +double amount
+    +String type
+}
+
+User "1" -- "0..*" Account : owns
+Account "1" -- "0..*" Transaction : tracks
+@enduml
