@@ -1,13 +1,13 @@
 @startuml
 package Frontend {
-  [Web Application] --> [User Interface]
+  [Web App] --> [UI]
 }
 
 package Backend {
-  [Business Logic] --> [Database]
-  [Business Logic] --> [Encryption Module]
+  [Logic] --> [Database]
+  [Logic] --> [Encryption]
 }
 
-[User Interface] --> [Business Logic]
+[UI] --> [Logic]
 [Database] --> [Transaction Logs]
 @enduml

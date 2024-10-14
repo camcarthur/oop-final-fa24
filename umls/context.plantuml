@@ -8,4 +8,5 @@ User --> (Transfer Funds)
 User --> (View Transaction History)
 
 Admin --> (View Logs)
+Admin --> (Transfer Funds)
 @enduml
