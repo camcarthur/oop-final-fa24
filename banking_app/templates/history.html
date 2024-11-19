@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Transaction History{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="/static/css/history.css">
+{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <h1>Transaction History</h1>
+    <p>View your past transactions below.</p>
+    <div class="filters">
+        <label for="filterDate">Filter by Date:</label>
+        <input type="date" id="filterDate">
+        <label for="filterType">Filter by Type:</label>
+        <select id="filterType">
+            <option value="">All</option>
+            <option value="credit">Credit</option>
+            <option value="debit">Debit</option>
+            <option value="transfer">Transfer</option>
+        </select>
+        <button id="applyFilters">Apply Filters</button>
+    </div>
+    <table class="history-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Account</th>
+                <th>Amount</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody id="historyTableBody">
+            <!-- Transactions will be dynamically inserted here -->
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/history.js" defer></script>
+{% endblock %}

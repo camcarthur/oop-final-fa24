@@ -1,0 +1,19 @@
+dashboard needs:
+access to recent transactions
+access to account balance
+access to transfers
+
+login needs:
+access to users 
+
+transfer needs:
+access to accounts
+access to account balances
+
+history needs:
+access to transfers
+
+registration needs:
+access to users
+access to emails to ensure no duplicates
+
