@@ -10,6 +10,7 @@ engine = create_engine(DATABASE_URL)
 
 Base.metadata.create_all(engine) # create all the tables
 
+
 from sqlalchemy.sql import text
 
 # allow privilages

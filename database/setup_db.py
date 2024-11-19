@@ -8,6 +8,7 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
     sudo -u postgres psql
     ALTER USER postgres WITH PASSWORD 'pass'; """
     
+    
 POSTGRES_USER = "postgres"
 POSTGRES_PASSWORD = "pass"
 POSTGRES_HOST = "localhost"

@@ -7,6 +7,7 @@ from datetime import datetime
 import enum
 import uuid
 
+
 Base = declarative_base()
 
 class Role(enum.Enum):
