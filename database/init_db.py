@@ -8,24 +8,22 @@ DATABASE_URL = "postgresql://banking_user:secure_password@localhost:5432/banking
 # Create the database engine
 engine = create_engine(DATABASE_URL)
 
-# Create tables
-Base.metadata.create_all(engine)
+Base.metadata.create_all(engine) # create all the tables
+
 
 from sqlalchemy.sql import text
 
-# Ensure the user has full privileges on the schema and tables
+# allow privilages
 with engine.connect() as conn:
     conn.execute(text("GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO banking_user;"))
     conn.execute(text("GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO banking_user;"))
 
-# Session
 Session = sessionmaker(bind=engine)
 session = Session()
 
-def delete_all_data():
+def delete_all_data(): # deletes data for testing purposes since no dupes allowed
     """Delete all data from the database (does not drop tables)."""
     try:
-        # Delete data from tables in reverse dependency order
         session.query(Transaction).delete()
         session.query(Account).delete()
         session.query(User).delete()
@@ -37,11 +35,9 @@ def delete_all_data():
         print(f"Error occurred while deleting data: {e}")
 
 def test_database():
-    """Test database operations."""
-    # Uncomment this line if you want to clear the database before testing
-    # delete_all_data()
+    # uncomment this line if you want to clear the database before testing
+    delete_all_data()
 
-    # Check if user already exists
     existing_user = session.query(User).filter_by(username="test_user").first()
     if not existing_user:
         user = User(
@@ -53,10 +49,9 @@ def test_database():
         session.add(user)
         session.commit()
 
-    # Fetch the user to ensure consistency
     user = session.query(User).filter_by(username="test_user").first()
 
-    # Create an account for the user
+    # account creation
     account = Account(
         user_id=user.user_id,
         account_type="checking",
@@ -65,7 +60,7 @@ def test_database():
     session.add(account)
     session.commit()
 
-    # Add a transaction
+    # transaction
     transaction = Transaction(
         account_id=account.account_id,
         transaction_type=TransactionType.deposit,
@@ -75,11 +70,9 @@ def test_database():
     session.add(transaction)
     session.commit()
 
-    # Query and print results
     print("Users:", session.query(User).all())
     print("Accounts:", session.query(Account).all())
     print("Transactions:", session.query(Transaction).all())
 
 if __name__ == "__main__":
-    # Call test_database to perform operations
     test_database()

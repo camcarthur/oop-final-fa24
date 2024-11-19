@@ -7,9 +7,9 @@ from datetime import datetime
 import enum
 import uuid
 
+
 Base = declarative_base()
 
-# Enum Definitions
 class Role(enum.Enum):
     user = "user"
     admin = "admin"
@@ -23,10 +23,6 @@ class TransactionStatus(enum.Enum):
     completed = "completed"
     failed = "failed"
 
-# User Table
-# ... [other imports and code remain the same]
-
-# User Table
 class User(Base):
     __tablename__ = 'users'
 
@@ -45,10 +41,10 @@ class User(Base):
         Index('ix_email', 'email')
     )
 
+    # these are for formatting and display
     def __repr__(self):
         return f"<User(user_id={self.user_id}, username='{self.username}', email='{self.email}', role='{self.role.value}')>"
 
-# Account Table
 class Account(Base):
     __tablename__ = 'accounts'
 
@@ -68,7 +64,6 @@ class Account(Base):
     def __repr__(self):
         return f"<Account(account_id={self.account_id}, user_id={self.user_id}, account_type='{self.account_type}', balance={self.balance})>"
 
-# Transaction Table
 class Transaction(Base):
     __tablename__ = 'transactions'
 
