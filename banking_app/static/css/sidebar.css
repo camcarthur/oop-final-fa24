@@ -1,0 +1,52 @@
+/* Sidebar styles */
+.sidebar {
+    width: 250px;
+    background-color: #0072ff;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box; /* Includes padding in the width */
+    height: 100vh; /* Full page height */
+    position: fixed; /* Sidebar stays fixed on the left */
+    top: 0;
+    left: 0;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background-color: #0056b3;
+}
+
+/* To add space for main content next to the sidebar */
+.content-container {
+    margin-left: 250px; /* Same width as the sidebar */
+    padding: 20px;
+    box-sizing: border-box;
+    width: calc(100% - 250px); /* Adjust for sidebar */
+    min-height: 100vh; /* Ensure it fills the viewport height */
+    background: #f8f9fa; /* Light background for content */
+}

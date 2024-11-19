@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Banking App{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/sidebar.css">
+    {% block additional_css %}{% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Banking App</h2>
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/transfer">Transfer Funds</a></li>
+                <li><a href="/settings">Settings</a></li>
+                <li><a href="/history">Transaction History</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-container">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
