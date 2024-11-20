@@ -1,59 +1,31 @@
-/* General body styles */
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(to right,
-    #00c6ff, #0072ff);
-    color: #333;
-}
-
-/* History container */
-.history-container {
-    width: 90%;
-    max-width: 800px;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Main content */
+.main-content h1 {
     text-align: center;
-}
-
-.history-container h2 {
-    color: #0072ff;
-    margin-bottom: 10px;
-}
-
-.history-container p {
-    font-size: 14px;
+    color: rgb(48, 62, 78);
     margin-bottom: 20px;
-    color: #666;
+    font-size: 26px;
 }
 
-/* Filter styles */
+/* Filters section */
 .filters {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    gap: 10px;
     flex-wrap: wrap;
 }
 
 .filters label {
-    margin-right: 10px;
+    margin-right: 5px;
     font-size: 14px;
-    color: #333;
+    color: rgb(48, 62, 78);
 }
 
 .filters input,
 .filters select,
 .filters button {
     padding: 8px;
-    margin: 5px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 14px;
@@ -64,13 +36,14 @@ body {
     color: white;
     border: none;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .filters button:hover {
     background-color: #0056b3;
 }
 
-/* History table */
+/* Transaction table */
 .history-table {
     width: 100%;
     border-collapse: collapse;

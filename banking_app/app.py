@@ -31,7 +31,28 @@ def handle_login():
 
 @app.route('/dashboard')
 def dashboard():
-    return render_template('dashboard.html')
+    # Mock user and transactions
+    user_name = "John Doe"  # Placeholder username
+    transactions = [
+        {"date": "08/03/2024", "type": "expense", "description": "Marty S.A.S.", "amount": 852.04},
+        {"date": "02/03/2024", "type": "expense", "description": "Groceries", "amount": 120.50},
+        {"date": "01/03/2024", "type": "expense", "description": "Royer", "amount": 487.09},
+        {"date": "11/03/2024", "type": "income", "description": "Salary", "amount": 707.95},
+        {"date": "08/03/2024", "type": "income", "description": "Bonus", "amount": 1931.61},
+        {"date": "07/03/2024", "type": "income", "description": "Refund", "amount": 640.10},
+    ]
+    pending_transfers = 3  # Placeholder for pending transfers
+
+    # Total balance (summed from SAMPLE_ACCOUNTS)
+    total_balance = sum(account["balance"] for account in SAMPLE_ACCOUNTS)
+
+    return render_template(
+        'dashboard.html',
+        user_name=user_name,
+        transactions=transactions,
+        pending_transfers=pending_transfers,
+        total_balance=total_balance,
+    )
 
 @app.route('/transfer')
 def transfer():
@@ -41,17 +62,33 @@ def transfer():
 @app.route('/transfer', methods=['POST'])
 def process_transfer():
     from_account_id = int(request.form.get('fromAccount'))
-    to_account = request.form.get('toAccount')
+    transfer_type = request.form.get('transferType')
     amount = float(request.form.get('amount'))
-    notes = request.form.get('notes')
-    frequency = request.form.get('frequency')
 
-    # Log transfer details (this will eventually be replaced with database logic)
-    print(f"Transfer from Account ID: {from_account_id}")
-    print(f"To Account: {to_account}")
-    print(f"Amount: {amount}")
-    print(f"Notes: {notes}")
-    print(f"Frequency: {frequency}")
+    # Retrieve account details (mock logic; replace with database query)
+    from_account = next((acc for acc in SAMPLE_ACCOUNTS if acc["id"] == from_account_id), None)
+
+    if not from_account or from_account["balance"] < amount:
+        return "Insufficient funds or invalid account.", 400
+
+    if transfer_type == "internal":
+        to_account_id = int(request.form.get('toInternalAccount'))
+        to_account = next((acc for acc in SAMPLE_ACCOUNTS if acc["id"] == to_account_id), None)
+        if not to_account:
+            return "Invalid target account.", 400
+
+        # Process internal transfer (mock behavior)
+        from_account["balance"] -= amount
+        to_account["balance"] += amount
+        print(f"Internal Transfer: ${amount} from {from_account['name']} to {to_account['name']}")
+
+    elif transfer_type == "external":
+        to_account = request.form.get('toExternalAccount')
+        notes = request.form.get('notesExternal')
+
+        # Process external transfer (mock behavior)
+        from_account["balance"] -= amount
+        print(f"External Transfer: ${amount} from {from_account['name']} to External Account {to_account}. Notes: {notes}")
 
     return "Transfer processed successfully!"
 
