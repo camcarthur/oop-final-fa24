@@ -1,31 +1,40 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const transferForm = document.getElementById("transferForm");
+    const transferTypeRadios = document.querySelectorAll('input[name="transferType"]');
+    const toAccountGroup = document.getElementById("toAccountGroup");
+    const internalDropdown = document.getElementById("toInternalAccount");
+    let externalInput = null;
 
-    transferForm.addEventListener("submit", (event) => {
-        event.preventDefault(); // Prevent default form submission
+    // Create external account input field
+    const createExternalAccountInput = () => {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.id = "toExternalAccount";
+        input.name = "toExternalAccount";
+        input.placeholder = "Enter recipient account number";
+        input.required = true;
+        input.classList.add("form-control");
+        return input;
+    };
 
-        const fromAccount = document.getElementById("fromAccount").value;
-        const toAccount = document.getElementById("toAccount").value.trim();
-        const amount = parseFloat(document.getElementById("amount").value);
-        const notes = document.getElementById("notes").value.trim();
-        const frequency = document.getElementById("frequency").value;
+    // Toggle between internal and external transfers
+    const toggleTransferType = () => {
+        const selectedType = document.querySelector('input[name="transferType"]:checked').value;
 
-        // Basic validation
-        if (!fromAccount) {
-            alert("Please select the account to transfer from.");
-            return;
+        if (selectedType === "internal") {
+            toAccountGroup.replaceChildren(internalDropdown);
+            document.getElementById("notesGroup").style.display = "none";
+        } else if (selectedType === "external") {
+            if (!externalInput) {
+                externalInput = createExternalAccountInput();
+            }
+            toAccountGroup.replaceChildren(externalInput);
+            document.getElementById("notesGroup").style.display = "block";
         }
-        if (!toAccount) {
-            alert("Please enter the recipient account number.");
-            return;
-        }
-        if (isNaN(amount) || amount <= 0) {
-            alert("Please enter a valid amount greater than 0.");
-            return;
-        }
+    };
 
-        // Mock transfer success
-        alert(`Transfer of $${amount.toFixed(2)} scheduled (${frequency}) to account ${toAccount}.`);
-        transferForm.reset(); // Clear the form after successful submission
-    });
+    // Add event listeners
+    transferTypeRadios.forEach((radio) => radio.addEventListener("change", toggleTransferType));
+
+    // Initialize
+    toggleTransferType();
 });

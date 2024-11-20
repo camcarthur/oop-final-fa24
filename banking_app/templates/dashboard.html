@@ -8,42 +8,42 @@
 
 {% block content %}
 <div class="main-content">
-    <h1>Welcome, {{ user_name }}!</h1>
+    <h1>Welcome, <span>{{ user_name }}</span>!</h1>
+
+    <!-- Account Overview -->
     <div class="account-summary">
         <div class="overview-card">
-            <h2>$399,858.01</h2>
-            <p>Balance on 02/12/2024</p>
+            <h2>${{ "%.2f" | format(total_balance) }}</h2>
+            <p>Total Balance Across All Accounts</p>
         </div>
     </div>
 
+    <!-- Recent Activity -->
     <div class="recent-activity">
-        <div class="recent-expenses" onclick="navigateToFilteredHistory('expenses')">
+        <div class="recent-expenses">
             <h3>Recent Expenses</h3>
             <ul>
-                <li>08/03/2024: Marty S.A.S. - $852.04</li>
-                <li>02/03/2024: Groceries - $120.50</li>
-                <li>01/03/2024: Royer - $487.09</li>
+                {% for transaction in transactions if transaction.type == "expense" %}
+                <li style="color: red;">{{ transaction.date }}: {{ transaction.description }} - ${{ "%.2f" | format(transaction.amount) }}</li>
+                {% endfor %}
             </ul>
         </div>
-        <div class="recent-incomes" onclick="navigateToFilteredHistory('income')">
+        <div class="recent-incomes">
             <h3>Recent Income</h3>
             <ul>
-                <li>11/03/2024: Salary - $707.95</li>
-                <li>08/03/2024: Bonus - $1,931.61</li>
-                <li>07/03/2024: Refund - $640.10</li>
+                {% for transaction in transactions if transaction.type == "income" %}
+                <li style="color: green;">{{ transaction.date }}: {{ transaction.description }} - ${{ "%.2f" | format(transaction.amount) }}</li>
+                {% endfor %}
             </ul>
         </div>
     </div>
 
+    <!-- Transfers in Progress -->
     <div class="dashboard-widgets">
-        <div class="transfers-progress" onclick="navigateToFilteredHistory('transfers')">
-            <h1>3</h1>
+        <div class="transfers-progress">
+            <h1>{{ pending_transfers }}</h1>
             <p>Transfers in Progress</p>
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script src="/static/js/dashboard.js" defer></script>
 {% endblock %}
