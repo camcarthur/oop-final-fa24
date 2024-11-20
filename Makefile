@@ -19,3 +19,7 @@ endif
 	$(PLANTUML) umls/physical.plantuml
 	$(PLANTUML) umls/process.plantuml
 	@echo "UML diagrams created and saved in umls folder"
+
+.PHONY: run
+run:
+	@cd logic && export FLASK_APP=main.py && flask run

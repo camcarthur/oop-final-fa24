@@ -10,6 +10,10 @@ users with individual accounts ([Abstract](/abstract.txt)).
 ## How to Run
 ```hold```
 
+```
+make run
+```
+
 
 ## How to Test
 
