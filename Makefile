@@ -1,7 +1,7 @@
 PLANTUML = java -jar ~/plantuml.jar
 
 .PHONY: all
-all: create-uml
+all: create-uml run
 	@echo "All done"
 
 .PHONY: create-uml
@@ -22,4 +22,4 @@ endif
 
 .PHONY: run
 run:
-	@cd logic && export FLASK_APP=main.py && flask run
+	@cd logic && export FLASK_APP=main.py && export PYTHONPATH=.. && flask run
