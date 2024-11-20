@@ -4,23 +4,19 @@ import os
 from dotenv import load_dotenv
 from user_auth import UserAuth
 from bank_system import BankSystem
+from sqlalchemy.orm import sessionmaker
+from database.init_db import engine
+from database import User, Account, Transaction
+
 
 app = Flask(__name__, template_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../banking_app/templates')), static_folder=os.path.abspath(os.path.join(os.path.dirname(__file__), '../banking_app/static')))
 load_dotenv(dotenv_path=".env")
 app.secret_key = os.getenv("SECRET_KEY")
 
+# Set up the database session
+Session = sessionmaker(bind=engine)
+db_session = Session()
 
-# Placeholder for accounts (to be replaced with a database later)
-SAMPLE_ACCOUNTS = [
-    {"id": 1, "name": "Checking Account", "balance": 2500.00},
-    {"id": 2, "name": "Savings Account", "balance": 15000.00},
-    {"id": 3, "name": "Business Account", "balance": 50000.00},
-]
-
-# Placeholder for login credentials (for testing purposes)
-SAMPLE_USERS = {
-    "test": "test",
-}
 
 # Initialize banking system and user authentication
 bank_system = BankSystem()
@@ -35,8 +31,9 @@ def handle_login():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    # Check credentials
-    if username in SAMPLE_USERS and SAMPLE_USERS[username] == password:
+    # Check credentials against the database
+    user = db_session.query(User).filter_by(username=username).first()
+    if user and user.password_hash == password:
         session['user_id'] = username
         return redirect(url_for('dashboard'))
     else:
@@ -46,7 +43,13 @@ def handle_login():
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
-    return render_template('dashboard.html', accounts=SAMPLE_ACCOUNTS)
+    # Fetch user accounts from the database
+    user = db_session.query(User).filter_by(username=session['user_id']).first()
+    if user:
+        user_accounts = db_session.query(Account).filter_by(user_id=user.user_id).all()
+    else:
+        user_accounts = []
+    return render_template('dashboard.html', accounts=user_accounts)
 
 @app.route('/transfer', methods=['GET', 'POST'])
 def transfer():
@@ -69,7 +72,13 @@ def transfer():
 
         return "Transfer processed successfully!"
 
-    return render_template('transfer.html', accounts=SAMPLE_ACCOUNTS)
+    # Fetch user accounts from the database
+    user = session.query(User).filter_by(username=session['user_id']).first()
+    if user:
+        user_accounts = session.query(Account).filter_by(user_id=user.user_id).all()
+    else:
+        user_accounts = []
+    return render_template('transfer.html', accounts=user_accounts)
 
 @app.route('/history')
 def transaction_history():
