@@ -47,9 +47,33 @@ def dashboard():
     user = db_session.query(User).filter_by(username=session['user_id']).first()
     if user:
         user_accounts = db_session.query(Account).filter_by(user_id=user.user_id).all()
+        total_balance = sum(account.balance for account in user_accounts)
+        user_name = user.username
     else:
         user_accounts = []
-    return render_template('dashboard.html', accounts=user_accounts)
+        total_balance = 0.0
+        user_name = "Guest"
+
+    # Placeholder for transactions
+    transactions = [
+        {"date": "08/03/2024", "type": "expense", "description": "Marty S.A.S.", "amount": 852.04},
+        {"date": "02/03/2024", "type": "expense", "description": "Groceries", "amount": 120.50},
+        {"date": "01/03/2024", "type": "expense", "description": "Royer", "amount": 487.09},
+        {"date": "11/03/2024", "type": "income", "description": "Salary", "amount": 707.95},
+        {"date": "08/03/2024", "type": "income", "description": "Bonus", "amount": 1931.61},
+        {"date": "07/03/2024", "type": "income", "description": "Refund", "amount": 640.10},
+    ]
+
+    pending_transfers = 3  # Placeholder for pending transfers
+
+    return render_template(
+        'dashboard.html',
+        accounts=user_accounts,
+        total_balance=total_balance,
+        user_name=user_name,
+        transactions=transactions,
+        pending_transfers=pending_transfers
+    )
 
 @app.route('/transfer', methods=['GET', 'POST'])
 def transfer():
@@ -58,24 +82,42 @@ def transfer():
 
     if request.method == 'POST':
         from_account_id = int(request.form.get('fromAccount'))
-        to_account = request.form.get('toAccount')
+        transfer_type = request.form.get('transferType')
         amount = float(request.form.get('amount'))
-        notes = request.form.get('notes')
-        frequency = request.form.get('frequency')
 
-        # Log transfer details (this will eventually be replaced with database logic)
-        print(f"Transfer from Account ID: {from_account_id}")
-        print(f"To Account: {to_account}")
-        print(f"Amount: {amount}")
-        print(f"Notes: {notes}")
-        print(f"Frequency: {frequency}")
+        # Retrieve the account details from the database
+        from_account = db_session.query(Account).filter_by(account_id=from_account_id, user_id=session['user_id']).first()
 
-        return "Transfer processed successfully!"
+        if not from_account or from_account.balance < amount:
+            return "Insufficient funds or invalid account.", 400
+
+        if transfer_type == "internal":
+            to_account_id = int(request.form.get('toInternalAccount'))
+            to_account = db_session.query(Account).filter_by(account_id=to_account_id, user_id=session['user_id']).first()
+            if not to_account:
+                return "Invalid target account.", 400
+
+            # Process internal transfer
+            from_account.balance -= amount
+            to_account.balance += amount
+            db_session.commit()
+            print(f"Internal Transfer: ${amount} from {from_account.name} to {to_account.name}")
+
+        elif transfer_type == "external":
+            to_account = request.form.get('toExternalAccount')
+            notes = request.form.get('notesExternal')
+
+            # Process external transfer
+            from_account.balance -= amount
+            db_session.commit()
+            print(f"External Transfer: ${amount} from {from_account.name} to External Account {to_account}. Notes: {notes}")
+
+        return redirect(url_for('dashboard'))
 
     # Fetch user accounts from the database
-    user = session.query(User).filter_by(username=session['user_id']).first()
+    user = db_session.query(User).filter_by(username=session['user_id']).first()
     if user:
-        user_accounts = session.query(Account).filter_by(user_id=user.user_id).all()
+        user_accounts = db_session.query(Account).filter_by(user_id=user.user_id).all()
     else:
         user_accounts = []
     return render_template('transfer.html', accounts=user_accounts)
@@ -86,15 +128,12 @@ def transaction_history():
         return redirect(url_for('login'))
     
     filter_type = request.args.get("type")
-    # Filter logic can be added here once the database is implemented
-    if filter_type == "debit":
-        return "Filtered for Expenses (Debit)"
-    elif filter_type == "credit":
-        return "Filtered for Income (Credit)"
-    elif filter_type == "transfer":
-        return "Filtered for Transfers"
-    else:
-        return render_template('history.html')
+    # Placeholder for filtered transactions
+    transactions = [
+        {"date": "08/03/2024", "type": filter_type or "all", "description": "Example Transaction", "amount": 500.0}
+    ]
+    
+    return render_template('history.html', transactions=transactions)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -104,8 +143,8 @@ def register():
         result = user_auth.register_user(username, password)
         if result['success']:
             return redirect(url_for('login'))
-        return render_template('register.html', error=result['message'])
-    return render_template('register.html')
+        return render_template('registration.html', error=result['message'])
+    return render_template('registration.html')
 
 @app.route('/logout')
 def logout():
