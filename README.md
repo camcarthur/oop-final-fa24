@@ -1,24 +1,28 @@
 # Object Oriented Programming Final - Banking Web App
 
 ## Group Members
+
 Colin McArthur, Jake Peterson, and Carlos Ortiz
 
 ## Description
+
 For our project we are going create a psuedo bank website that has functionality to track multiple
 users with individual accounts ([Abstract](/abstract.txt)).
 
 ## How to Run
-```hold```
 
+```bash
+docker-compose build
+docker-compose up
 ```
+
+```bash
 make run
 ```
-
 
 ## How to Test
 
 ```hold```
-
 
 
 # Judges' Average Score
