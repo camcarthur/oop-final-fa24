@@ -3,7 +3,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const registrationForm = document.getElementById("registrationForm");
 
-    registrationForm.addEventListener("submit", (event) => {
+    registrationForm.addEventListener("submit", async (event) => {
         event.preventDefault(); // Prevent default form submission
 
         const username = document.getElementById("username").value.trim();
@@ -22,12 +22,35 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Mock registration success (can be replaced with actual backend call later)
-        const newUser = { username, email, password };
-        console.log("New User Registered:", newUser);
+        // Prepare data to send to the server
+        const formData = new URLSearchParams();
+        formData.append('username', username);
+        formData.append('email', email);
+        formData.append('password', password);
 
-        alert("Registration successful! You can now log in.");
-        registrationForm.reset(); // Clear the form after successful registration
-        window.location.href = "/"; // Redirect to login page
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formData.toString(),
+            });
+
+            if (response.redirected) {
+                // If the server redirects, follow the redirect
+                window.location.href = response.url;
+            } else if (response.ok) {
+                // Registration successful
+                alert("Registration successful! You can now log in.");
+                registrationForm.reset();
+                window.location.href = "/";
+            } else {
+                const errorText = await response.text();
+                alert("Registration failed: " + errorText);
+            }
+        } catch (error) {
+            alert("An error occurred: " + error.message);
+        }
     });
 });
