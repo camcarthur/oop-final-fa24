@@ -20,6 +20,18 @@ docker-compose up
 make run
 ```
 
+Drop the database then remake:
+```bash
+sudo -u postgres psql
+DROP DATABASE banking_db;
+python3 database/setup_db.py
+python3 python3 -m database.init_db
+```
+Then you should be able to:
+```bash
+make run
+```
+
 ## How to Test
 
 ```hold```
