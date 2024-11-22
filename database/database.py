@@ -23,12 +23,18 @@ class TransactionStatus(enum.Enum):
     completed = "completed"
     failed = "failed"
 
+class AccountType(enum.Enum):
+    checking = "checking"
+    savings = "savings"
+
 class User(Base):
     __tablename__ = 'users'
 
     user_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     username = Column(String, unique=True, nullable=False)
     email = Column(String, unique=True, nullable=False)
+    first_name = Column(String, nullable= False)
+    last_name = Column(String, nullable=False)
     password_hash = Column(String, nullable=False)
     role = Column(Enum(Role), nullable=False, default=Role.user)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -43,14 +49,15 @@ class User(Base):
 
     # these are for formatting and display
     def __repr__(self):
-        return f"<User(user_id={self.user_id}, username='{self.username}', email='{self.email}', role='{self.role.value}')>"
+        return (f"<User(user_id={self.user_id}, username='{self.username}', email='{self.email}', "
+                f"role='{self.role.value}', first_name='{self.first_name}', last_name='{self.last_name}')>")
 
 class Account(Base):
     __tablename__ = 'accounts'
 
     account_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.user_id'), nullable=False)
-    account_type = Column(String, nullable=False)
+    account_type = Column(Enum(AccountType), nullable=False)
     balance = Column(Numeric(precision=10, scale=2), nullable=False, default=0.00)
     created_at = Column(DateTime, default=datetime.utcnow)
 
@@ -96,3 +103,6 @@ class Transaction(Base):
                 f"transaction_type='{self.transaction_type.value}', amount={self.amount}, "
                 f"timestamp={self.timestamp}, status='{self.status.value}', "
                 f"target_account_id={self.target_account_id})>")
+
+
+# date, description, amount for logging (based off banking_app app.py)
