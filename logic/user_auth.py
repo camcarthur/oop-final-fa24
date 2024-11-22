@@ -1,17 +1,37 @@
+# user_auth.py
+import bcrypt
+from database.models import User, Role
+from database.init_db import session  # Ensure this is the same session used in main.py
+
 class UserAuth:
-    def __init__(self, bank_system):
+    def __init__(self, bank_system, session):
         self.bank_system = bank_system
-        self.users = {}  # Dictionary to store user information
+        self.session = session
 
-    def register_user(self, username, password):
-        if username in self.users:
-            return {'success': False, 'message': 'Username already exists'}
-        user_id = len(self.users) + 1  # Simple user ID generation
-        self.users[username] = {'password': password, 'user_id': user_id}
-        self.bank_system.accounts[user_id] = {}  # Create empty accounts for the user
-        return {'success': True, 'message': 'User registered successfully'}
+    def register_user(self, username, email, password):
+        # Check if the user already exists
+        existing_user = self.session.query(User).filter_by(username=username).first()
+        if existing_user:
+            return {'success': False, 'message': 'User already exists.'}
 
-    def login_user(self, username, password):
-        if username in self.users and self.users[username]['password'] == password:
-            return self.users[username]
-        return None
+        # Hash the password
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+        # Create a new user instance
+        new_user = User(
+            username=username,
+            email=email,
+            password_hash=hashed_password,
+            role=Role.user
+        )
+
+        # Add the new user to the database and commit the transaction
+        try:
+            self.session.add(new_user)
+            self.session.commit()
+            print(f"User {username} registered successfully.")
+            return {'success': True}
+        except Exception as e:
+            self.session.rollback()
+            print(f"Error adding user to the database: {e}")
+            return {'success': False, 'message': 'An error occurred while registering.'}
