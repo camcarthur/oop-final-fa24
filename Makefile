@@ -20,6 +20,10 @@ endif
 	$(PLANTUML) umls/process.plantuml
 	@echo "UML diagrams created and saved in umls folder"
 
+.PHONY: build_db
+build-db:
+	@cd database && python3 setup_db.py && python3 -m database.init_db
+
 .PHONY: run
 run:
-	@cd logic && export FLASK_APP=main.py && export PYTHONPATH=.. && flask run
+	@cd logic && export FLASK_APP=main:app && export PYTHONPATH=.. && flask run
