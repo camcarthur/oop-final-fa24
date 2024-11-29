@@ -1,4 +1,12 @@
 /* Main content */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f8f9fa;
+    overflow-x: hidden;
+}
 .main-content h1 {
     text-align: center;
     color: rgb(48, 62, 78);
