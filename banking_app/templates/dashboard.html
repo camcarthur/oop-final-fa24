@@ -13,7 +13,7 @@
     <!-- Account Overview -->
     <div class="account-summary">
         <div class="overview-card">
-            <h2>${{ "%.2f" | format(total_balance) }}</h2>
+            <h2>${{ '{:,.2f}'.format(total_balance) }}</h2>
             <p>Total Balance Across All Accounts</p>
         </div>
     </div>

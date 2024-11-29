@@ -1,23 +1,74 @@
 /* General layout */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    height: 100vh; /* Full viewport height */
     background: #f8f9fa;
+    overflow-x: hidden; /* Eliminate any chance of horizontal scrolling */
 }
 
-/* Sidebar layout (delegated to sidebar.css) */
+.app-container {
+    display: flex; /* Sidebar and content side by side */
+    margin: 0;
+    padding: 0;
+    width: 100%; /* Ensure the app container spans the entire width */
+}
 
-/* Main content container */
-.content-container {
-    margin-left: 250px; /* Space for sidebar */
+.sidebar {
+    flex-shrink: 0; /* Prevent sidebar from shrinking */
+    width: 250px; /* Fixed width of sidebar */
+    background-color: rgb(48, 62, 78); /* Dark navy blue */
+    color: white;
+    display: flex;
+    flex-direction: column;
     padding: 20px;
     box-sizing: border-box;
-    width: calc(100% - 250px); /* Adjust for sidebar */
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Content container styles */
+.content-container {
+    margin-left: 250px; /* Offset for the sidebar */
+    padding: 20px;
+    box-sizing: border-box;
+    width: calc(100% - 250px); /* Dynamically calculate the remaining width */
     min-height: 100vh; /* Full viewport height */
     background: #f8f9fa; /* Light background for content */
+    overflow-x: hidden; /* Prevent content from creating horizontal scroll */
 }
 
 /* Main content area */
@@ -27,9 +78,9 @@ body {
     box-sizing: border-box;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow-y: auto; /* Add scrolling if content exceeds viewport */
     max-width: 1200px;
     margin: 0 auto; /* Center the content */
+    overflow-y: auto; /* Add scrolling if content exceeds viewport */
 }
 
 /* Greeting styles */
@@ -42,7 +93,7 @@ body {
 }
 
 .main-content h1 span {
-    color: #0072ff; /* Highlight the user's name */
+    color: #004aad; /* Highlight the user's name */
 }
 
 /* Account overview section */
@@ -52,7 +103,7 @@ body {
 }
 
 .overview-card {
-    background: linear-gradient(to right, #f85032, #e73827); /* Red gradient */
+    background: linear-gradient(to right, #004aad, #003366); /* Blue gradient */
     padding: 20px;
     border-radius: 8px;
     color: white;
@@ -126,7 +177,7 @@ body {
 
 .transfers-progress h1 {
     font-size: 48px;
-    color: #0072ff;
+    color: #004aad;
     margin: 0;
 }
 
@@ -137,6 +188,19 @@ body {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    .sidebar {
+        position: absolute;
+        width: 100%; /* Sidebar takes full width on smaller screens */
+        height: auto;
+        top: 0;
+        left: 0;
+    }
+
+    .content-container {
+        margin-left: 0; /* Remove left margin on small screens */
+        width: 100%;
+    }
+
     .recent-activity {
         flex-direction: column;
     }
