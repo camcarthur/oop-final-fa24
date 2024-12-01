@@ -10,7 +10,6 @@
 <div class="main-content">
     <h1>Welcome, <span>{{ user_name }}</span>!</h1>
 
-    <!-- Account Overview -->
     <div class="account-summary">
         <div class="overview-card">
             <h2>${{ '{:,.2f}'.format(total_balance) }}</h2>
@@ -18,7 +17,6 @@
         </div>
     </div>
 
-    <!-- Recent Activity -->
     <div class="recent-activity">
         <div class="recent-expenses">
             <h3>Recent Expenses</h3>
@@ -38,7 +36,6 @@
         </div>
     </div>
 
-    <!-- Transfers in Progress -->
     <div class="dashboard-widgets">
         <div class="transfers-progress">
             <h1>{{ pending_transfers }}</h1>

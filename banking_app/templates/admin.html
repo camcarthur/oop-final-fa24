@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block additional_css %}
+<link rel="stylesheet" href="/static/css/admin.css">
+{% endblock %}
+
+{% block content %}
+<div class="main-content">
+    <h1>Admin Panel</h1>
+    <p>All users: </p>
+
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Account Number</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Number of Accounts</th>
+                <th>Total Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.account_id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.num_accounts }}</td>
+                <td>${{ "{:,.2f}".format(user.balance) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
