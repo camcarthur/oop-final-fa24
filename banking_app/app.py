@@ -2,17 +2,25 @@ from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-# Placeholder for accounts (to be replaced with a database later)
+# Placeholder for accounts
 SAMPLE_ACCOUNTS = [
     {"id": 1, "name": "Checking Account", "balance": 2500.00},
     {"id": 2, "name": "Savings Account", "balance": 15000.00},
     {"id": 3, "name": "Business Account", "balance": 50000.00},
 ]
 
-# Placeholder for login credentials (for testing purposes)
+# Placeholder for login credentials
 SAMPLE_USERS = {
-    "test": "test",
+    "test":"test",
+    "admin":"admin",
 }
+
+# Placeholder for database (admin page)
+FAKE_USERS = [
+    {"id": 1, "username": "colinm", "email": "email@1.com", "num_accounts": "5", "balance": 42500.00},
+    {"id": 2, "username": "jakep", "email": "email@2.com", "num_accounts": "8", "balance": 2315000.00},
+    {"id": 3, "username": "carlosm", "email": "email@3.com", "num_accounts": "1", "balance": 50000.00},
+]
 
 @app.route('/')
 def login():
@@ -25,7 +33,10 @@ def handle_login():
 
     # Check credentials
     if username in SAMPLE_USERS and SAMPLE_USERS[username] == password:
-        return redirect(url_for('dashboard'))
+        if username == "admin": # redirect if admin
+            return redirect(url_for('admin'))
+        else:
+            return redirect(url_for('dashboard'))
     else:
         return "Invalid username or password", 401
 
@@ -108,6 +119,11 @@ def transaction_history():
 @app.route('/register')
 def register():
     return render_template('registration.html')
+
+@app.route('/admin')
+def admin():
+    # Pass the fake user data to the template
+    return render_template('admin.html', users=FAKE_USERS)
 
 
 if __name__ == '__main__':
