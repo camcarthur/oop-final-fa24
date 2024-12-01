@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById("loginForm");
 
     loginForm.addEventListener("submit", (event) => {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault();
 
         const username = document.getElementById("username").value.trim();
         const password = document.getElementById("password").value.trim();
@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Submit login data via fetch
         fetch("/login", {
             method: "POST",
             headers: {
@@ -22,14 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
         })
             .then((response) => {
                 if (response.ok) {
-                    window.location.href = "/dashboard"; // Redirect to /dashboard
+                    window.location.href = "/dashboard";
                 } else {
                     return response.text();
                 }
             })
             .then((errorMessage) => {
                 if (errorMessage) {
-                    alert(errorMessage); // Show server error message
+                    alert(errorMessage);
                 }
             })
             .catch((error) => {

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const transferForm = document.getElementById("transferForm");
     let externalInput = null;
 
-    // Create external account input field
+
     const createExternalAccountInput = () => {
         const input = document.createElement("input");
         input.type = "text";
@@ -14,12 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
         input.placeholder = "Enter recipient account number";
         input.required = true;
         input.classList.add("form-control");
-        input.style.padding = "10px"; // Consistent padding
+        input.style.padding = "10px";
         input.style.borderRadius = "5px";
         return input;
     };
 
-    // Toggle between internal and external transfers
     const toggleTransferType = () => {
         const selectedType = document.querySelector('input[name="transferType"]:checked').value;
 
@@ -40,12 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Handle form submission
     transferForm.addEventListener("submit", (event) => {
-        event.preventDefault(); // Prevent default form submission
-
-        // Simulate form submission (e.g., send data via fetch or a server call)
-        // For now, we assume the transfer is successful
-        alert("Transfer initiated"); // Show success message
-        window.location.reload(); // Reload the page after showing the message
+        event.preventDefault();
+        alert("Transfer sent");
+        window.location.reload();
     });
 
     // Initialize
