@@ -37,12 +37,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Add event listeners
     transferTypeRadios.forEach((radio) => radio.addEventListener("change", toggleTransferType));
 
-    // Handle form submission
+    // Remove or comment out the submit event listener
+    /*
     transferForm.addEventListener("submit", (event) => {
         event.preventDefault();
         alert("Transfer sent");
         window.location.reload();
     });
+    */
 
     // Initialize
     toggleTransferType();
