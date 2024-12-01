@@ -1,4 +1,3 @@
-"""main.py"""
 from flask import Flask, render_template, request, redirect, url_for, session
 import os
 import bcrypt
@@ -10,6 +9,12 @@ from database.models import User, Account, Transaction
 from sqlalchemy.orm import sessionmaker
 from functools import wraps
 from abc import ABC, abstractmethod
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 class BankApp:
     _instance = None
@@ -89,7 +94,7 @@ class BankApp:
             # Check credentials against the database
             user = self._db_session.query(User).filter_by(username=username).first()
             if user and bcrypt.checkpw(password.encode('utf-8'), user.password_hash.encode('utf-8')):
-                session['user_id'] = str(user.user_id)  # Store user_id (UUID) as string
+                session['user_id'] = user.user_id  # Store user_id as integer
                 return redirect(url_for('dashboard'))
             else:
                 return "Invalid username or password", 401
@@ -98,7 +103,8 @@ class BankApp:
         @login_required
         def dashboard():
             # Fetch user accounts from the database
-            user = self._db_session.query(User).filter_by(user_id=session['user_id']).first()
+            user_id = session.get('user_id')
+            user = self._db_session.query(User).filter_by(user_id=user_id).first()
             if user:
                 user_accounts = self._db_session.query(Account).filter_by(user_id=user.user_id).all()
                 total_balance = sum(account.balance for account in user_accounts)
@@ -132,47 +138,74 @@ class BankApp:
         @self._app.route('/transfer', methods=['GET', 'POST'])
         @login_required
         def transfer():
-            user = self._db_session.query(User).filter_by(user_id=session['user_id']).first()
+            user_id = session.get('user_id')
+            user = self._db_session.query(User).filter_by(user_id=user_id).first()
             if not user:
                 return redirect(url_for('login'))
 
             if request.method == 'POST':
-                from_account_id = request.form.get('fromAccount')
-                transfer_type = request.form.get('transferType')
-                amount = float(request.form.get('amount'))
+                try:
+                    logger.debug(f"Received form data: {request.form}")
 
-                # Retrieve the account details from the database
-                from_account = self._db_session.query(Account).filter_by(account_id=from_account_id, user_id=user.user_id).first()
+                    from_account_id = int(request.form.get('fromAccount'))
+                    transfer_type = request.form.get('transferType')
+                    amount = float(request.form.get('amount'))
 
-                if not from_account or from_account.balance < amount:
-                    return "Insufficient funds or invalid account.", 400
+                    # Retrieve the account details from the database
+                    from_account = self._db_session.query(Account).filter_by(
+                        account_id=from_account_id, user_id=user.user_id
+                    ).first()
 
-                if transfer_type == "internal":
-                    to_account_id = request.form.get('toInternalAccount')
-                    to_account = self._db_session.query(Account).filter_by(account_id=to_account_id, user_id=user.user_id).first()
-                    if not to_account:
-                        return "Invalid target account.", 400
+                    if not from_account:
+                        logger.error("Invalid source account.")
+                        return "Invalid source account.", 400
+                    if from_account.balance < amount:
+                        logger.error("Insufficient funds.")
+                        return "Insufficient funds.", 400
 
-                    # Process internal transfer
-                    from_account.balance -= amount
-                    to_account.balance += amount
-                    self._db_session.commit()
-                    print(f"Internal Transfer: ${amount} from {from_account.account_id} to {to_account.account_id}")
+                    if transfer_type == "internal":
+                        to_account_id = int(request.form.get('toInternalAccount'))
+                        to_account = self._db_session.query(Account).filter_by(
+                            account_id=to_account_id, user_id=user.user_id
+                        ).first()
+                        if not to_account:
+                            logger.error("Invalid target account.")
+                            return "Invalid target account.", 400
 
-                elif transfer_type == "external":
-                    to_account = request.form.get('toExternalAccount')
-                    notes = request.form.get('notesExternal')
+                        # Debugging: Log balances before transfer
+                        logger.debug(f"Before Transfer - From Account Balance: {from_account.balance}, To Account Balance: {to_account.balance}")
 
-                    # Process external transfer
-                    from_account.balance -= amount
-                    self._db_session.commit()
-                    print(f"External Transfer: ${amount} from {from_account.account_id} to External Account {to_account}. Notes: {notes}")
+                        # Process internal transfer
+                        from_account.balance -= amount
+                        to_account.balance += amount
 
-                return redirect(url_for('dashboard'))
+                        # Debugging: Log balances after transfer
+                        logger.debug(f"After Transfer - From Account Balance: {from_account.balance}, To Account Balance: {to_account.balance}")
+
+                        self._db_session.commit()
+                        logger.info(f"Internal Transfer: ${amount} from {from_account.account_id} to {to_account.account_id}")
+
+                    elif transfer_type == "external":
+                        to_account = request.form.get('toExternalAccount')
+                        notes = request.form.get('notesExternal')
+
+                        # Process external transfer
+                        from_account.balance -= amount
+
+                        self._db_session.commit()
+                        logger.info(f"External Transfer: ${amount} from {from_account.account_id} to External Account {to_account}. Notes: {notes}")
+
+                    return redirect(url_for('dashboard'))
+
+                except Exception as e:
+                    self._db_session.rollback()
+                    logger.exception("An error occurred during the transfer.")
+                    return f"An error occurred during the transfer: {str(e)}", 500
 
             # Fetch user accounts from the database
             user_accounts = self._db_session.query(Account).filter_by(user_id=user.user_id).all()
             return render_template('transfer.html', accounts=user_accounts)
+
 
         @self._app.route('/history')
         @login_required
@@ -193,6 +226,15 @@ class BankApp:
                 password = request.form['password']
                 result = self._user_auth.register_user(username, email, password)
                 if result['success']:
+                    # Create initial accounts with base balances
+                    new_user = self._db_session.query(User).filter_by(username=username).first()
+                    initial_accounts = [
+                        Account(user_id=new_user.user_id, account_type='Checking Account', balance=500.00),
+                        Account(user_id=new_user.user_id, account_type='Savings Account', balance=1500.00),
+                        Account(user_id=new_user.user_id, account_type='Business Account', balance=3000.00)
+                    ]
+                    self._db_session.add_all(initial_accounts)
+                    self._db_session.commit()
                     return redirect(url_for('login'))
                 else:
                     error_message = result.get('message', 'Registration failed.')
@@ -205,7 +247,6 @@ class BankApp:
             return redirect(url_for('login'))
 
 # Decorator for requiring login
-
 def login_required(f):
     """
     Decorator to check if the user is logged in before accessing certain routes.
@@ -277,4 +318,4 @@ bank_app = BankApp()
 app = bank_app.app  # to expose app to flaskCLI
 
 if __name__ == "__main__":
-    bank_app.run()
+    app.run(debug=True)

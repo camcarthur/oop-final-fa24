@@ -11,24 +11,24 @@
     <h1>Transfer Funds</h1>
     <p>Select the type of transfer you want to make:</p>
 
-    <!-- Transfer Type Selector -->
-    <div class="transfer-type">
-        <input type="radio" id="internalTransfer" name="transferType" value="internal" checked>
-        <label for="internalTransfer">Internal Transfer</label>
-
-        <input type="radio" id="externalTransfer" name="transferType" value="external">
-        <label for="externalTransfer">External Transfer</label>
-    </div>
-
     <!-- Transfer Form -->
     <form id="transferForm" method="POST" action="/transfer">
+        <!-- Transfer Type Selector -->
+        <div class="transfer-type">
+            <input type="radio" id="internalTransfer" name="transferType" value="internal" checked>
+            <label for="internalTransfer">Internal Transfer</label>
+
+            <input type="radio" id="externalTransfer" name="transferType" value="external">
+            <label for="externalTransfer">External Transfer</label>
+        </div>
+
         <!-- From Account -->
         <div class="form-group">
             <label for="fromAccount">From Account:</label>
             <select id="fromAccount" name="fromAccount" required>
                 <option value="" disabled selected>Select an account</option>
                 {% for account in accounts %}
-                <option value="{{ account.id }}">{{ account.name }} - ${{ "%.2f" | format(account.balance) }}</option>
+                <option value="{{ account.account_id }}">{{ account.account_type }} - ${{ "%.2f" | format(account.balance) }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -40,7 +40,7 @@
             <select id="toInternalAccount" name="toInternalAccount" required>
                 <option value="" disabled selected>Select an account</option>
                 {% for account in accounts %}
-                <option value="{{ account.id }}">{{ account.name }}</option>
+                <option value="{{ account.account_id }}">{{ account.account_type }} - ${{ "%.2f" | format(account.balance) }}</option>
                 {% endfor %}
             </select>
         </div>
