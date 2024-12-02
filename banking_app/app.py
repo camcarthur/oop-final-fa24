@@ -22,7 +22,7 @@ SAMPLE_USERS = {
 FAKE_USERS = [
     {"id": 1, "username": "colinm", "email": "email@1.com", "num_accounts": "5", "balance": 42500.00},
     {"id": 2, "username": "jakep", "email": "email@2.com", "num_accounts": "8", "balance": 2315000.00},
-    {"id": 3, "username": "carlosm", "email": "email@3.com", "num_accounts": "1", "balance": 50000.00},
+    {"id": 3, "username": "carloso", "email": "email@3.com", "num_accounts": "1", "balance": 50000.00},
 ]
 
 def login_required(f):
@@ -147,6 +147,33 @@ def admin():
 def logout():
     session.pop("username", None)
     return redirect(url_for("login"))
+
+@app.route('/admin/transaction', methods=['POST'])
+@login_required
+def add_transaction():
+    if session.get("username") != "admin":
+        return "Unauthorized", 403
+
+    account_id = int(request.form.get("account_id"))
+    amount = float(request.form.get("amount"))
+    transaction_type = request.form.get("type")
+
+    # Find the account by ID
+    account = next((acc for acc in SAMPLE_ACCOUNTS if acc["id"] == account_id), None)
+    if not account:
+        return f"Account with ID {account_id} not found.", 404
+
+    # Apply the transaction
+    if transaction_type == "deposit":
+        account["balance"] += amount
+        message = f"Successfully deposited ${amount:.2f} to account {account_id}."
+    elif transaction_type == "withdraw":
+        if account["balance"] < amount:
+            return f"Insufficient funds in account {account_id}.", 400
+        account["balance"] -= amount
+        message = f"Successfully withdrew ${amount:.2f} from account {account_id}."
+
+    return render_template("admin.html", users=FAKE_USERS, message=message)
 
 
 if __name__ == '__main__':

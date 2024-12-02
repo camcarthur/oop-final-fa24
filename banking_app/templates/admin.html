@@ -9,12 +9,12 @@
 {% block content %}
 <div class="main-content">
     <h1>Admin Panel</h1>
-    <p>All users: </p>
+    <p>All user accounts:</p>
 
     <table class="admin-table">
         <thead>
             <tr>
-                <th>Account Number</th>
+                <th>ID</th>
                 <th>Username</th>
                 <th>Email</th>
                 <th>Number of Accounts</th>
@@ -24,7 +24,7 @@
         <tbody>
             {% for user in users %}
             <tr>
-                <td>{{ user.account_id }}</td>
+                <td>{{ user.id }}</td>
                 <td>{{ user.username }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.num_accounts }}</td>
@@ -33,5 +33,25 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <h2>Add Transaction</h2>
+    <form method="POST" action="/admin/transaction">
+        <div class="form-group">
+            <label for="account_id">Account ID:</label>
+            <input type="number" id="account_id" name="account_id" required>
+        </div>
+        <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" required>
+        </div>
+        <div class="form-group">
+            <label for="type">Transaction Type:</label>
+            <select id="type" name="type" required>
+                <option value="deposit">Deposit</option>
+                <option value="withdraw">Withdraw</option>
+            </select>
+        </div>
+        <button type="submit" class="submit-button">Submit Transaction</button>
+    </form>
 </div>
 {% endblock %}
