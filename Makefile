@@ -27,3 +27,9 @@ build-db:
 .PHONY: run
 run:
 	@cd logic && export FLASK_APP=main:app && export PYTHONPATH=.. && flask run
+
+.PHONY: test
+run-test:
+	@echo "run pytest verbose"
+	@pytest --verbose --color=yes --cov --cov-report term --cov-report html tests/
+	@echo "Success"
