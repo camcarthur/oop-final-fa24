@@ -10,6 +10,11 @@ class BankSystem:
         """Getter for user accounts."""
         return self._accounts
 
+    @accounts.setter
+    def accounts(self, value):
+        """Setter for user accounts."""
+        self._accounts = value
+
     def get_user_accounts(self, user_id):
         """
         Get accounts for a specific user.

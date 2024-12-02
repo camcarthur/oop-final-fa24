@@ -11,9 +11,24 @@ class UserAuth:
         self._session = session
 
     @property
+    def bank_system(self):
+        """Getter for the bank system."""
+        return self._bank_system
+
+    @bank_system.setter
+    def bank_system(self, value):
+        """Setter for the bank system."""
+        self._bank_system = value
+
+    @property
     def session(self):
         """Getter for the database session."""
         return self._session
+
+    @session.setter
+    def session(self, value):
+        """Setter for the database session."""
+        self._session = value
 
     def register_user(self, username, email, password):
         """

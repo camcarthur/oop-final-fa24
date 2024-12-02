@@ -4,3 +4,7 @@ python-dotenv
 jinja2
 flask
 bcrypt
+hypothesis
+pytest
+pytest-flask
+pytest-cov

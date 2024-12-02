@@ -2,8 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import os
 import bcrypt
 from dotenv import load_dotenv
-from user_auth import UserAuth
-from bank_system import BankSystem
+from logic.user_auth import UserAuth
+from logic.bank_system import BankSystem
 from database.init_db import engine
 from database.models import User, Account, Transaction
 from sqlalchemy.orm import sessionmaker
@@ -317,5 +317,5 @@ class WithdrawCommand(Command):
 bank_app = BankApp()
 app = bank_app.app  # to expose app to flaskCLI
 
-if __name__ == "__main__":
-    app.run(debug=True)
+if __name__ == "__main__":  # pragma: no cover
+    app.run(debug=False)
