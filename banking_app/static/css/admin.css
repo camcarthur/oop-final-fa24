@@ -1,3 +1,11 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f8f9fa;
+    overflow-x: hidden; 
+}
+
 .main-content {
     margin: 20px auto;
     max-width: 800px;

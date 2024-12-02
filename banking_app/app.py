@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
+from functools import wraps
+from datetime import timedelta
 
 app = Flask(__name__)
-
+app.secret_key = ".env"  # Replace with a secure random key
+app.permanent_session_lifetime = timedelta(minutes=30) 
 # Placeholder for accounts
 SAMPLE_ACCOUNTS = [
     {"id": 1, "name": "Checking Account", "balance": 2500.00},
@@ -22,25 +25,36 @@ FAKE_USERS = [
     {"id": 3, "username": "carlosm", "email": "email@3.com", "num_accounts": "1", "balance": 50000.00},
 ]
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "username" not in session:
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return decorated_function
 @app.route('/')
-def login():
+def home():
     return render_template('login.html')
 
-@app.route('/login', methods=['POST'])
-def handle_login():
-    username = request.form.get('username')
-    password = request.form.get('password')
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
 
-    # Check credentials
-    if username in SAMPLE_USERS and SAMPLE_USERS[username] == password:
-        if username == "admin": # redirect if admin
-            return redirect(url_for('admin'))
+        # Check credentials
+        if username in SAMPLE_USERS and SAMPLE_USERS[username] == password:
+            session["username"] = username  # Store username in session
+            if username == "admin":
+                return redirect(url_for("admin"))
+            else:
+                return redirect(url_for("dashboard"))
         else:
-            return redirect(url_for('dashboard'))
-    else:
-        return "Invalid username or password", 401
+            return "Invalid username or password", 401
+    return render_template('login.html')
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
     # Mock user and transactions
     user_name = "John Doe"  # Placeholder username
@@ -66,11 +80,13 @@ def dashboard():
     )
 
 @app.route('/transfer')
+@login_required
 def transfer():
     # Pass sample accounts to the template
     return render_template('transfer.html', accounts=SAMPLE_ACCOUNTS)
 
 @app.route('/transfer', methods=['POST'])
+@login_required
 def process_transfer():
     from_account_id = int(request.form.get('fromAccount'))
     transfer_type = request.form.get('transferType')
@@ -104,6 +120,7 @@ def process_transfer():
     return "Transfer processed successfully!"
 
 @app.route('/history')
+@login_required
 def transaction_history():
     filter_type = request.args.get("type")
     # Filter logic can be added here once the database is implemented
@@ -121,9 +138,15 @@ def register():
     return render_template('registration.html')
 
 @app.route('/admin')
+@login_required
 def admin():
     # Pass the fake user data to the template
     return render_template('admin.html', users=FAKE_USERS)
+
+@app.route('/logout')
+def logout():
+    session.pop("username", None)
+    return redirect(url_for("login"))
 
 
 if __name__ == '__main__':
