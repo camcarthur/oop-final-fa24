@@ -21,16 +21,16 @@
         <div class="recent-expenses">
             <h3>Recent Expenses</h3>
             <ul>
-                {% for transaction in transactions if transaction.type == "expense" %}
-                <li style="color: red;">{{ transaction.date }}: {{ transaction.description }} - ${{ "%.2f" | format(transaction.amount) }}</li>
+                {% for transaction in recent_expenses %}
+                <li style="color: red;">{{ transaction.created_at.strftime("%Y-%m-%d") }}: {{ transaction.transaction_type.name }} - ${{ "%.2f" | format(transaction.amount) }}</li>
                 {% endfor %}
             </ul>
         </div>
         <div class="recent-incomes">
             <h3>Recent Income</h3>
             <ul>
-                {% for transaction in transactions if transaction.type == "income" %}
-                <li style="color: green;">{{ transaction.date }}: {{ transaction.description }} - ${{ "%.2f" | format(transaction.amount) }}</li>
+                {% for transaction in recent_income %}
+                <li style="color: green;">{{ transaction.created_at.strftime("%Y-%m-%d") }}: {{ transaction.transaction_type.name }} - ${{ "%.2f" | format(transaction.amount) }}</li>
                 {% endfor %}
             </ul>
         </div>

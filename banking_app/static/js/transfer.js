@@ -8,10 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const createExternalAccountInput = () => {
         const input = document.createElement("input");
-        input.type = "text";
+        input.type = "number";
         input.id = "toExternalAccount";
         input.name = "toExternalAccount";
-        input.placeholder = "Enter recipient account number";
+        input.placeholder = "Enter recipient account ID";
         input.required = true;
         input.classList.add("form-control");
         input.style.padding = "10px";
@@ -36,15 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Add event listeners
     transferTypeRadios.forEach((radio) => radio.addEventListener("change", toggleTransferType));
-
-    // Remove or comment out the submit event listener
-    /*
-    transferForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        alert("Transfer sent");
-        window.location.reload();
-    });
-    */
 
     // Initialize
     toggleTransferType();

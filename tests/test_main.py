@@ -5,9 +5,9 @@ from unittest.mock import Mock, patch, PropertyMock, MagicMock
 from flask.sessions import SecureCookieSessionInterface
 import bcrypt
 import sqlalchemy.orm
-from database.models import User, Account  # Added import for User and Account
+from database.models import User, Account
 from logic.user_auth import UserAuth
-from logic.bank_system import BankSystem  # Added import for BankSystem
+from logic.bank_system import BankSystem
 
 @pytest.fixture
 def client():

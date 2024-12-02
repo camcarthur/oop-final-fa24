@@ -1,7 +1,8 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float, Enum, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Enum, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 import enum
+from datetime import datetime
 
 Base = declarative_base()
 
@@ -34,22 +35,23 @@ class User(Base):
 
 class Account(Base):
     __tablename__ = "accounts"
-
     account_id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
     account_type = Column(String, nullable=False)
     balance = Column(Float, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="accounts")
     transactions = relationship("Transaction", back_populates="account")
 
 class Transaction(Base):
     __tablename__ = "transactions"
-
+    
     transaction_id = Column(Integer, primary_key=True, autoincrement=True)
     account_id = Column(Integer, ForeignKey("accounts.account_id"), nullable=False)
     transaction_type = Column(Enum(TransactionType), nullable=False)
     amount = Column(Float, nullable=False)
     status = Column(Enum(TransactionStatus), nullable=False)
-
+    created_at = Column(DateTime, default=datetime.utcnow)
+    notes = Column(String, nullable=True)
     account = relationship("Account", back_populates="transactions")

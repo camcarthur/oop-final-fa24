@@ -26,7 +26,7 @@ build-db:
 
 .PHONY: run
 run:
-	@cd logic && export FLASK_APP=main:app && export PYTHONPATH=.. && flask run
+	@cd logic && export FLASK_APP=main:app && export PYTHONPATH=.. && flask run --debug
 
 .PHONY: test
 run-test:
