@@ -1,27 +1,40 @@
 @startuml
-class User {
-    +UUID id
-    +String name
-    +String password
-    +authenticate()
-    +updateProfile()
+skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam padding 5
+skinparam nodeSep 60
+skinparam rankSep 40
+skinparam packageTitleFontSize 12
+skinparam packageFontSize 10
+skinparam defaultFontSize 10
+skinparam ArrowFontSize 11
+
+title **Bank Application Architecture**
+
+' Place Flask Server (FS) at the top
+package "Flask Server (FS)" as FS {
+    [Flask App]
 }
 
-class Account {
-    +UUID accountId
-    +double balance
-    +withdraw(amount)
-    +deposit(amount)
-    +transferFunds(toAccount, amount)
+' Place Logic Layer below Flask Server
+package "Logic Layer" as Logic {
+    [UserAuth]
+    [DepositCommand]
+    [WithdrawCommand]
 }
 
-class Transaction {
-    +UUID transactionId
-    +date timestamp
-    +double amount
-    +String type
+' Place Database (DB) to the right of Logic Layer
+package "Database" as DB {
+    [User]
+    [Account]
+    [Transfer]
 }
 
-User "1" -- "0..*" Account : owns
-Account "1" -- "0..*" Transaction : tracks
+' Explicitly position elements
+FS -d-> Logic : Handles Requests
+Logic -u-> FS : Responds
+
+Logic -d-> [DB] : Updates DB
+
+
 @enduml
