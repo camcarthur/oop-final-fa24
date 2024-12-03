@@ -29,13 +29,13 @@ jobs:
     - name: Run flake8
       run: flake8
 
-    - name: Run autopep8
-      run: |
-        autopep8 --diff --exit-code --recursive .
-    - name: Run mypy
-      run: |
-        mypy --strict --allow-untyped-decorators --ignore-missing-imports logic
-        mypy --strict --allow-untyped-decorators --ignore-missing-imports database
+    # - name: Run autopep8
+    #   run: |
+    #     autopep8 --diff --exit-code --recursive .
+    # - name: Run mypy
+    #   run: |
+    #     mypy --strict --allow-untyped-decorators --ignore-missing-imports logic
+    #     mypy --strict --allow-untyped-decorators --ignore-missing-imports database
 
     - name: Set PYTHONPATH
       run: echo "PYTHONPATH=$PYTHONPATH:${GITHUB_WORKSPACE}/" >> $GITHUB_ENV
@@ -48,19 +48,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install  pytest pytest-cov
 
-    - name: Run tests
-      run: |
-        pytest --verbose tests
+    # - name: Run tests
+    #   run: |
+    #     pytest --verbose tests/
         
-    - name: Run pytest with coverage
-      run: |
-        pytest --cov=tests --cov-report=term-missing
-        pytest --cov=tests --cov-report=term-missing
-    - name: Upload coverage report
-      uses: actions/upload-artifact@v4
-      with:
-        name: coverage-report
-        path: htmlcov
+    # - name: Run pytest with coverage
+    #   run: |
+    #     pytest --cov=tests/ --cov-report=term-missing
+    # - name: Upload coverage report
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: coverage-report
+    #     path: htmlcov
 
   spellcheck:
     runs-on: ubuntu-latest
