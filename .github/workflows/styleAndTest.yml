@@ -65,6 +65,3 @@ jobs:
         pip install codespell
     - name: Check spelling
       run: codespell
-
-
-
