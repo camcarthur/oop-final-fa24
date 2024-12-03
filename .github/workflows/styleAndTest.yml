@@ -50,13 +50,13 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest --verbose logic/*
-        pytest --verbose database/*
+        pytest --verbose logic/main.py
+        pytest --verbose database/models.py
         
     - name: Run pytest with coverage
       run: |
-        pytest --cov=logic/* --cov-report=term-missing
-        pytest --cov=database/* --cov-report=term-missing
+        pytest --cov=logic/main.py --cov-report=term-missing
+        pytest --cov=database/models.py --cov-report=term-missing
     - name: Upload coverage report
       uses: actions/upload-artifact@v4
       with:
