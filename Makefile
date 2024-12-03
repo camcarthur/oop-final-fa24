@@ -30,9 +30,13 @@ build-db:
 	@cd database && python3 setup_db.py && python3 -m database.init_db
 # if you get a Makefile error just run ```python3 -m database.init_db``` by itself
 
-.PHONY: run
+.PHONY: run-debug
 run:
 	@cd logic && export FLASK_APP=main:app && export PYTHONPATH=.. && flask run --debug
+
+.PHONY: run
+run:
+	@cd logic && export FLASK_APP=main:app && export PYTHONPATH=.. && flask run
 
 .PHONY: test
 run-test:
