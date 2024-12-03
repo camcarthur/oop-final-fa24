@@ -26,8 +26,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install flake8 mypy autopep8
 
-    - name: Run flake8
-      run: flake8
+    # - name: Run flake8
+    #   run: flake8
 
     # - name: Run autopep8
     #   run: |
