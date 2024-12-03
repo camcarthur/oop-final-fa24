@@ -18,6 +18,11 @@ endif
 	$(PLANTUML) umls/logical.plantuml
 	$(PLANTUML) umls/physical.plantuml
 	$(PLANTUML) umls/process.plantuml
+	$(PLANTUML) umls/logic.plantuml
+	$(PLANTUML) umls/bank_system.plantuml
+	$(PLANTUML) umls/user_auth.plantuml
+	$(PLANTUML) umls/bank_app.plantuml
+	$(PLANTUML) umls/command.plantuml
 	@echo "UML diagrams created and saved in umls folder"
 
 .PHONY: build_db

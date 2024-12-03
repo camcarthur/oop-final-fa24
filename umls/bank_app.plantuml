@@ -1,0 +1,25 @@
+@startuml
+scale 1
+title "UML Class Diagram - BankApp"
+
+class BankApp {
+  .. Instance Variables ..
+  - _instance: BankApp
+  - _app: Flask
+  - _db_session: ORM_Session
+  - _bank_system: BankSystem
+  - _user_auth: UserAuth
+  .. Instance Methods ..
+  + __new__(cls: Type[BankApp], *args, **kwargs): BankApp
+  + __init__(): None
+  + app: Flask
+  + db_session: ORM_Session
+  + bank_system: BankSystem
+  + user_auth: UserAuth
+  + setup_routes(): None
+  + add_admin_user(): None
+}
+
+BankApp --> BankSystem: uses >
+BankApp --> UserAuth: uses >
+@enduml
