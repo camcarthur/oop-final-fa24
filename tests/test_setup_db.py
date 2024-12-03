@@ -1,7 +1,7 @@
 import pytest
 import psycopg2
 from database.setup_db import create_database_and_user
-from psycopg2 import sql
+
 
 POSTGRES_USER = "postgres"
 POSTGRES_PASSWORD = "pass"
@@ -9,6 +9,7 @@ POSTGRES_HOST = "localhost"
 POSTGRES_PORT = 5432
 NEW_DATABASE = "banking_db"
 NEW_USER = "banking_user"
+
 
 @pytest.fixture(scope="module")
 def postgres_connection():
@@ -24,12 +25,16 @@ def postgres_connection():
     yield connection
     connection.close()
 
+
 def test_database_exists(postgres_connection):
     """Verify the database exists."""
     cursor = postgres_connection.cursor()
-    cursor.execute("SELECT 1 FROM pg_database WHERE datname = %s;", (NEW_DATABASE,))
-    assert cursor.fetchone() is not None, f"Database '{NEW_DATABASE}' does not exist."
+    cursor.execute("SELECT 1 FROM pg_database \
+                   WHERE datname = %s;", (NEW_DATABASE,))
+    assert cursor.fetchone() is not None, \
+        f"Database '{NEW_DATABASE}' does not exist."
     cursor.close()
+
 
 def test_user_exists(postgres_connection):
     """Verify the user exists."""
@@ -38,6 +43,10 @@ def test_user_exists(postgres_connection):
     assert cursor.fetchone() is not None, f"User '{NEW_USER}' does not exist."
     cursor.close()
 
+
 def test_create_database_and_user():
-    """Test that the database and user creation function runs without errors."""
+    """
+    Test that the database and user
+    creation function runs without errors.
+    """
     create_database_and_user()
