@@ -3,7 +3,7 @@ class BankSystem:
         """
         Initialize BankSystem with a dictionary to store user accounts.
         """
-        self._accounts = {}  # Dictionary to store user accounts
+        self._accounts = {}
 
     @property
     def accounts(self):
@@ -23,14 +23,14 @@ class BankSystem:
 
     def deposit(self, user_id, account_id, amount):
         """
-        Deposit an amount into the specified user account.
+        Deposit an amount into the specified user account
         """
         if user_id in self._accounts and account_id in self._accounts[user_id]:
             self._accounts[user_id][account_id] += amount
 
     def withdraw(self, user_id, account_id, amount):
         """
-        Withdraw an amount from the specified user account if sufficient funds exist.
+        Withdraw an amount from the specified user.
         """
         if user_id in self._accounts and account_id in self._accounts[user_id]:
             if self._accounts[user_id][account_id] >= amount:
@@ -41,7 +41,7 @@ class BankSystem:
         Transfer funds between two user accounts.
         """
         if user_id in self._accounts:
-            if from_account in self._accounts[user_id] and to_account in self._accounts[user_id]:
+            if from_account in self._accounts[user_id] and to_account in self._accounts[user_id]:  # noqa: E501
                 if self._accounts[user_id][from_account] >= amount:
                     self._accounts[user_id][from_account] -= amount
                     self._accounts[user_id][to_account] += amount

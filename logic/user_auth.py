@@ -1,6 +1,6 @@
 import bcrypt
 from database.models import User, Role
-from database.init_db import session
+
 
 class UserAuth:
     def __init__(self, bank_system, session):
@@ -34,15 +34,14 @@ class UserAuth:
         """
         Register a new user with a hashed password and default role.
         """
-        # Check if the user already exists
-        existing_user = self._session.query(User).filter_by(username=username).first()
+        existing_user = self._session.query(User).filter_by(
+            username=username).first()
         if existing_user:
             return {'success': False, 'message': 'User already exists.'}
 
-        # Hash the password
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'),
+                                        bcrypt.gensalt()).decode('utf-8')
 
-        # Create a new user instance
         new_user = User(
             username=username,
             email=email,
@@ -50,7 +49,6 @@ class UserAuth:
             role=Role.user
         )
 
-        # Add the new user to the database and commit the transaction
         try:
             self._session.add(new_user)
             self._session.commit()
@@ -59,4 +57,5 @@ class UserAuth:
         except Exception as e:
             self._session.rollback()
             print(f"Error adding user to the database: {e}")
-            return {'success': False, 'message': 'An error occurred while registering.'}
+            return {'success': False, 'message': 'An error occurred while\
+                 registering.'}

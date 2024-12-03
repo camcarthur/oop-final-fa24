@@ -2,17 +2,22 @@ from sqlalchemy.orm import Session
 from database.models import User, Account, Transaction, TransactionType, TransactionStatus
 
 
-
 class BaseFactory:
     def __init__(self, session: Session):
         self.session = session
 
     def create(self, **kwargs):
-        raise NotImplementedError("Subclasses must implement the 'create' method.")
+        raise NotImplementedError(
+            "Subclasses must implement the 'create' method.")
 
 
 class UserFactory(BaseFactory):
-    def create(self, username: str, email: str, password_hash: str, role="user"):
+    def create(
+            self,
+            username: str,
+            email: str,
+            password_hash: str,
+            role="user"):
         user = User(
             username=username,
             email=email,
@@ -47,4 +52,3 @@ class TransactionFactory(BaseFactory):
         self.session.add(transaction)
         self.session.commit()
         return transaction
-

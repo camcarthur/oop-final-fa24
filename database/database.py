@@ -10,18 +10,22 @@ import uuid
 
 Base = declarative_base()
 
+
 class Role(enum.Enum):
     user = "user"
     admin = "admin"
+
 
 class TransactionType(enum.Enum):
     deposit = "deposit"
     withdrawal = "withdrawal"
     transfer = "transfer"
 
+
 class TransactionStatus(enum.Enum):
     completed = "completed"
     failed = "failed"
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -43,15 +47,33 @@ class User(Base):
 
     # these are for formatting and display
     def __repr__(self):
-        return f"<User(user_id={self.user_id}, username='{self.username}', email='{self.email}', role='{self.role.value}')>"
+        return f"<User(user_id={
+            self.user_id}, username='{
+            self.username}', email='{
+            self.email}', role='{
+                self.role.value}')>"
+
 
 class Account(Base):
     __tablename__ = 'accounts'
 
-    account_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey('users.user_id'), nullable=False)
+    account_id = Column(
+        UUID(
+            as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4)
+    user_id = Column(
+        UUID(
+            as_uuid=True),
+        ForeignKey('users.user_id'),
+        nullable=False)
     account_type = Column(String, nullable=False)
-    balance = Column(Numeric(precision=10, scale=2), nullable=False, default=0.00)
+    balance = Column(
+        Numeric(
+            precision=10,
+            scale=2),
+        nullable=False,
+        default=0.00)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="accounts")
@@ -62,18 +84,35 @@ class Account(Base):
     )
 
     def __repr__(self):
-        return f"<Account(account_id={self.account_id}, user_id={self.user_id}, account_type='{self.account_type}', balance={self.balance})>"
+        return f"<Account(account_id={
+            self.account_id}, user_id={
+            self.user_id}, account_type='{
+            self.account_type}', balance={
+                self.balance})>"
+
 
 class Transaction(Base):
     __tablename__ = 'transactions'
 
-    transaction_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    account_id = Column(UUID(as_uuid=True), ForeignKey('accounts.account_id'), nullable=False)
+    transaction_id = Column(
+        UUID(
+            as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4)
+    account_id = Column(
+        UUID(
+            as_uuid=True),
+        ForeignKey('accounts.account_id'),
+        nullable=False)
     transaction_type = Column(Enum(TransactionType), nullable=False)
     amount = Column(Numeric(precision=10, scale=2), nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow)
     status = Column(Enum(TransactionStatus), nullable=False)
-    target_account_id = Column(UUID(as_uuid=True), ForeignKey('accounts.account_id'), nullable=True)
+    target_account_id = Column(
+        UUID(
+            as_uuid=True),
+        ForeignKey('accounts.account_id'),
+        nullable=True)
 
     account = relationship(
         "Account",
@@ -92,7 +131,12 @@ class Transaction(Base):
     )
 
     def __repr__(self):
-        return (f"<Transaction(transaction_id={self.transaction_id}, account_id={self.account_id}, "
-                f"transaction_type='{self.transaction_type.value}', amount={self.amount}, "
-                f"timestamp={self.timestamp}, status='{self.status.value}', "
-                f"target_account_id={self.target_account_id})>")
+        return (
+            f"<Transaction(transaction_id={
+                self.transaction_id}, account_id={
+                self.account_id}, " f"transaction_type='{
+                self.transaction_type.value}', amount={
+                    self.amount}, " f"timestamp={
+                        self.timestamp}, status='{
+                            self.status.value}', " f"target_account_id={
+                                self.target_account_id})>")
