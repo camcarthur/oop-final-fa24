@@ -1,5 +1,3 @@
-/* Main content */
-
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
@@ -14,7 +12,6 @@ body {
     font-size: 26px;
 }
 
-/* Filters section */
 .filters {
     display: flex;
     justify-content: space-between;
@@ -74,7 +71,6 @@ body {
     background-color: #f9f9f9;
 }
 
-/* Back button */
 .back-button {
     padding: 10px 20px;
     background-color: #0072ff;
