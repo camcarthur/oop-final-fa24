@@ -46,4 +46,5 @@ def test_register_user_exception(user_auth):
     result = user_auth.register_user("new_user",
                                      "email@example.com", "password")
     assert result['success'] is False
-    assert result['message'] == 'An error occurred while registering.'
+    assert result['message'] == 'An error occurred while\
+                 registering.'
