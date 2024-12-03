@@ -1,4 +1,3 @@
-/* General body styles */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -9,21 +8,19 @@ body {
     height: 100vh;
     background: linear-gradient(to right, #6a11cb, #2575fc);
     color: #333;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: hidden;
 }
 
-/* Login container */
 .login-container {
     width: 100%;
     max-width: 400px;
-    padding: 30px; /* Add padding for breathing room */
+    padding: 30px;
     background: white;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
-/* Heading and subtext */
 .login-container h2 {
     margin-bottom: 10px;
     color: #6a11cb;
@@ -36,21 +33,19 @@ body {
     color: #666;
 }
 
-/* Form styling */
 form {
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* Ensure inputs stretch to match the container width */
-    gap: 15px; /* Add consistent spacing between elements */
+    align-items: stretch;
+    gap: 15px;
 }
 
-/* Form group styling */
 .form-group {
     display: flex;
     flex-direction: column;
-    align-items: stretch; /* Align inputs to their container */
+    align-items: stretch;
     text-align: left;
-    gap: 5px; /* Add spacing between the label and input */
+    gap: 5px;
 }
 
 .form-group label {
@@ -60,23 +55,22 @@ form {
 }
 
 .form-group input {
-    width: 100%; /* Fully occupy the container */
+    width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 14px;
-    box-sizing: border-box; /* Include padding and borders in width calculation */
+    box-sizing: border-box;
 }
 
 .form-group input:focus {
     outline: none;
     border-color: #6a11cb;
-    box-shadow: 0 0 5px rgba(106, 17, 203, 0.2); /* Subtle glow effect */
+    box-shadow: 0 0 5px rgba(106, 17, 203, 0.2);
 }
 
-/* Login button */
 .login-button {
-    width: 100%; /* Stretch to fill the form width */
+    width: 100%;
     padding: 12px;
     background-color: #6a11cb;
     color: white;
@@ -92,7 +86,6 @@ form {
     background-color: #2575fc;
 }
 
-/* Register link */
 .register-link {
     margin-top: 20px;
     font-size: 14px;

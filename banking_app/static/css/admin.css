@@ -17,7 +17,7 @@ body {
 
 .main-content h1 {
     text-align: center;
-    color: rgb(48, 62, 78); /* Dark navy blue */
+    color: rgb(48, 62, 78);
     margin-bottom: 20px;
 }
 
@@ -35,7 +35,7 @@ body {
 }
 
 .admin-table th {
-    background-color: rgb(48, 62, 78); /* Dark navy blue */
+    background-color: rgb(48, 62, 78);
     color: white;
 }
 
