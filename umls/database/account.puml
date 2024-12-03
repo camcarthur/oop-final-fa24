@@ -1,0 +1,15 @@
+@startuml
+scale 1
+title "UML Class Diagram - Account"
+
+class Account {
+  .. Instance Variables ..
+  + account_id: Integer
+  + user_id: Integer
+  + account_type: String
+  + balance: Float
+  + created_at: DateTime
+  + user: Relationship
+  + transactions: Relationship
+}
+@enduml

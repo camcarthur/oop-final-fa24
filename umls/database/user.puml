@@ -1,0 +1,15 @@
+@startuml
+scale 1
+title "UML Class Diagram - User"
+
+class User {
+  .. Instance Variables ..
+  + user_id: Integer
+  + username: String
+  + email: String
+  + password_hash: String
+  + role: Enum(Role)
+  + accounts: Relationship
+
+}
+@enduml

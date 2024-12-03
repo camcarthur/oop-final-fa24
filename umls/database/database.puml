@@ -1,0 +1,37 @@
+@startuml
+scale 1
+title "UML Class Diagram - Database"
+
+class User {
+  + user_id: Integer
+  + username: String
+  + email: String
+  + password_hash: String
+  + role: Enum(Role)
+  + accounts: Relationship
+}
+
+class Account {
+  + account_id: Integer
+  + user_id: Integer
+  + account_type: String
+  + balance: Float
+  + created_at: DateTime
+  + user: Relationship
+  + transactions: Relationship
+}
+
+class Transaction {
+  + transaction_id: Integer
+  + account_id: Integer
+  + transaction_type: Enum(TransactionType)
+  + amount: Float
+  + status: Enum(TransactionStatus)
+  + created_at: DateTime
+  + notes: String
+  + account: Relationship
+}
+
+User --> Account : contains>
+Account --> Transaction : contains>
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+scale 1
+title "UML Class Diagram - Transaction"
+
+class Transaction {
+  .. Instance Variables ..
+  + transaction_id: Integer
+  + account_id: Integer
+  + transaction_type: Enum(TransactionType)
+  + amount: Float
+  + status: Enum(TransactionStatus)
+  + created_at: DateTime
+  + notes: String
+  + account: Relationship
+
+}
+@enduml
