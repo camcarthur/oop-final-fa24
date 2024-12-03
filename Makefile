@@ -1,7 +1,7 @@
 PLANTUML = java -jar ~/plantuml.jar
 
 .PHONY: all
-all: create-uml run
+all: check-style fix-style check-type run-test create-uml
 	@echo "All done"
 
 .PHONY: create-uml
@@ -33,4 +33,29 @@ run:
 run-test:
 	@echo "run pytest verbose"
 	@pytest --verbose --color=yes --cov --cov-report term --cov-report html tests/
+	@echo "Success"
+
+.PHONY: clean
+clean:
+	@echo "Cleaning dirs"
+	@rm -rf `find . -type d -name __pycache__`
+	@rm -rf `find . -type d -name .pytest_cache`
+	@rm -rf `find . -type d -name .mypy_cache`
+	@rm -rf `*.pyc`
+	@echo "Success"
+
+.PHONY: check-style
+check-style: 
+	@echo "Checking style with flake8"
+	@flake8 .
+	@echo "Success"
+
+.PHONY: fix-style
+fix-style:
+	autopep8 --in-place --recursive --aggressive --aggressive .
+
+.PHONY: check-type
+check-type:
+	@echo "Checking type with mypy"
+	@mypy --disallow-untyped-defs --strict .
 	@echo "Success"

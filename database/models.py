@@ -7,14 +7,18 @@ from datetime import datetime
 Base = declarative_base()
 
 # Enums
+
+
 class Role(enum.Enum):
     user = "user"
     admin = "admin"
+
 
 class TransactionType(enum.Enum):
     deposit = "deposit"
     withdrawal = "withdrawal"
     transfer = "transfer"
+
 
 class TransactionStatus(enum.Enum):
     pending = "pending"
@@ -22,6 +26,8 @@ class TransactionStatus(enum.Enum):
     failed = "failed"
 
 # Models
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -32,6 +38,7 @@ class User(Base):
     role = Column(Enum(Role), nullable=False)
 
     accounts = relationship("Account", back_populates="user")
+
 
 class Account(Base):
     __tablename__ = "accounts"
@@ -44,11 +51,15 @@ class Account(Base):
     user = relationship("User", back_populates="accounts")
     transactions = relationship("Transaction", back_populates="account")
 
+
 class Transaction(Base):
     __tablename__ = "transactions"
-    
+
     transaction_id = Column(Integer, primary_key=True, autoincrement=True)
-    account_id = Column(Integer, ForeignKey("accounts.account_id"), nullable=False)
+    account_id = Column(
+        Integer,
+        ForeignKey("accounts.account_id"),
+        nullable=False)
     transaction_type = Column(Enum(TransactionType), nullable=False)
     amount = Column(Float, nullable=False)
     status = Column(Enum(TransactionStatus), nullable=False)
