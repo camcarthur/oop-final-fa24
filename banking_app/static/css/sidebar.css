@@ -1,7 +1,6 @@
-/* Sidebar */
 .sidebar {
     width: 250px;
-    background-color: rgb(48, 62, 78); /* Dark navy blue */
+    background-color: rgb(48, 62, 78);
     color: white;
     display: flex;
     flex-direction: column;
@@ -44,16 +43,15 @@
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Adjusting layout for content */
 .app-container {
     display: flex;
 }
 
 .content-container {
-    margin-left: 250px; /* Ensure content starts next to the sidebar */
+    margin-left: 250px;
     padding: 20px;
     box-sizing: border-box;
-    width: calc(100% - 250px); /* Ensure full width minus sidebar */
+    width: calc(100% - 250px);
     min-height: 100vh;
-    background: #f8f9fa; /* Light background for content */
+    background: #f8f9fa;
 }

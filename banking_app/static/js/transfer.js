@@ -34,9 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Add event listeners
+    // event listeners
     transferTypeRadios.forEach((radio) => radio.addEventListener("change", toggleTransferType));
 
-    // Initialize
     toggleTransferType();
 });

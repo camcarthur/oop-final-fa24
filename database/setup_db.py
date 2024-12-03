@@ -1,10 +1,11 @@
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
-# should only need to run once. each time this is ran it will delete the existing database and create a new one  # noqa: E501
+# should only need to run once. each time this is ran it will delete the
+# existing database and create a new one
 
 """ default user after installing postgres is "postgres"
-    password was not working for me so i had to reset to "pass" using the postgres shell  # noqa: E501
+    password was not working for me so i had to reset to "pass" using the postgres shell
     sudo -u postgres psql
     ALTER USER postgres WITH PASSWORD 'pass'; """
 
@@ -19,11 +20,7 @@ NEW_USER = "banking_user"
 NEW_PASSWORD = "secure_password"
 
 
-def create_database_and_user() -> None:
-    """
-    Create a PostgreSQL database and user. If the database or user already exists,  # noqa: E501
-    they are dropped and recreated.
-    """
+def create_database_and_user():
     try:
         connection = psycopg2.connect(
             dbname="postgres",
@@ -35,35 +32,32 @@ def create_database_and_user() -> None:
         connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cursor = connection.cursor()
 
-        # Drop the database if it exists
+        # deletes database if it already exists
         cursor.execute(
-            f"SELECT 1 FROM pg_database WHERE datname = '{NEW_DATABASE}';"
-        )
+            f"SELECT 1 FROM pg_database WHERE datname = '{NEW_DATABASE}';")
         if cursor.fetchone():
             cursor.execute(f"DROP DATABASE {NEW_DATABASE};")
             print(f"Database '{NEW_DATABASE}' dropped successfully.")
 
-        # Create a new database
-        cursor.execute(f"CREATE DATABASE {NEW_DATABASE};")
+        cursor.execute(f"CREATE DATABASE {NEW_DATABASE};")  # creates database
         print(f"Database '{NEW_DATABASE}' created successfully.")
 
-        # Drop the user if it exists
+        # check if the user exists if it does delete
         cursor.execute(f"SELECT 1 FROM pg_roles WHERE rolname = '{NEW_USER}';")
         if cursor.fetchone():
             cursor.execute(f"DROP ROLE {NEW_USER};")
             print(f"User '{NEW_USER}' dropped successfully.")
 
-        # Create a new user
-        cursor.execute(f"CREATE USER {NEW_USER} WITH PASSWORD '{NEW_PASSWORD}';")  # noqa: E501
+        cursor.execute(
+            f"CREATE USER {NEW_USER} WITH PASSWORD '{NEW_PASSWORD}';")  # creates user
         print(f"User '{NEW_USER}' created successfully.")
 
-        # Grant privileges to the new user
+        # grant privilages stuff
         cursor.execute(
-            f"GRANT ALL PRIVILEGES ON DATABASE {NEW_DATABASE} TO {NEW_USER};"
-        )
-        print(f"Granted privileges on database '{NEW_DATABASE}' to user '{NEW_USER}'.")  # noqa: E501
+            f"GRANT ALL PRIVILEGES ON DATABASE {NEW_DATABASE} TO {NEW_USER};")
+        print(
+            f"Granted privileges on database '{NEW_DATABASE}' to user '{NEW_USER}'.")
 
-        # Clean up
         cursor.close()
         connection.close()
 
