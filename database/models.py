@@ -1,5 +1,5 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Float, Enum, ForeignKey, DateTime
+from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column, Integer, String, Float, Enum, ForeignKey, DateTime  # noqa: E501
 from sqlalchemy.orm import relationship
 import enum
 from datetime import datetime
