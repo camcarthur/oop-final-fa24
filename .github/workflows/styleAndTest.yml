@@ -50,8 +50,7 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest --verbose logic/main.py
-        pytest --verbose database/models.py
+        pytest --verbose tests/
         
     - name: Run pytest with coverage
       run: |
