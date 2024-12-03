@@ -283,5 +283,5 @@ def test_withdraw_command(client):
         # Verify that the withdraw method was called with correct parameters
         mock_withdraw.assert_called_once_with(
             mock_user.user_id, mock_account.account_id, 100.0)
-        
+
         assert mock_account.balance == 500.00

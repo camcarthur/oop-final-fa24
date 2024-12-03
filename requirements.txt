@@ -8,3 +8,6 @@ hypothesis
 pytest
 pytest-flask
 pytest-cov
+flake8
+autopep8
+mypy

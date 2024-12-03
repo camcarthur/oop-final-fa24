@@ -4,7 +4,7 @@ from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = ".env"  # Replace with a secure random key
-app.permanent_session_lifetime = timedelta(minutes=30) 
+app.permanent_session_lifetime = timedelta(minutes=30)
 # Placeholder for accounts
 SAMPLE_ACCOUNTS = [
     {"id": 1, "name": "Checking Account", "balance": 2500.00},
@@ -14,16 +14,28 @@ SAMPLE_ACCOUNTS = [
 
 # Placeholder for login credentials
 SAMPLE_USERS = {
-    "test":"test",
-    "admin":"admin",
+    "test": "test",
+    "admin": "admin",
 }
 
 # Placeholder for database (admin page)
-FAKE_USERS = [
-    {"id": 1, "username": "colinm", "email": "email@1.com", "num_accounts": "5", "balance": 42500.00},
-    {"id": 2, "username": "jakep", "email": "email@2.com", "num_accounts": "8", "balance": 2315000.00},
-    {"id": 3, "username": "carloso", "email": "email@3.com", "num_accounts": "1", "balance": 50000.00},
-]
+FAKE_USERS = [{"id": 1,
+               "username": "colinm",
+               "email": "email@1.com",
+               "num_accounts": "5",
+               "balance": 42500.00},
+              {"id": 2,
+               "username": "jakep",
+               "email": "email@2.com",
+               "num_accounts": "8",
+               "balance": 2315000.00},
+              {"id": 3,
+               "username": "carloso",
+               "email": "email@3.com",
+               "num_accounts": "1",
+               "balance": 50000.00},
+              ]
+
 
 def login_required(f):
     @wraps(f)
@@ -32,9 +44,12 @@ def login_required(f):
             return redirect(url_for("login"))
         return f(*args, **kwargs)
     return decorated_function
+
+
 @app.route('/')
 def home():
     return render_template('login.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -52,6 +67,7 @@ def login():
         else:
             return "Invalid username or password", 401
     return render_template('login.html')
+
 
 @app.route('/dashboard')
 @login_required
@@ -79,11 +95,13 @@ def dashboard():
         total_balance=total_balance,
     )
 
+
 @app.route('/transfer')
 @login_required
 def transfer():
     # Pass sample accounts to the template
     return render_template('transfer.html', accounts=SAMPLE_ACCOUNTS)
+
 
 @app.route('/transfer', methods=['POST'])
 @login_required
@@ -93,21 +111,26 @@ def process_transfer():
     amount = float(request.form.get('amount'))
 
     # Retrieve account details (mock logic; replace with database query)
-    from_account = next((acc for acc in SAMPLE_ACCOUNTS if acc["id"] == from_account_id), None)
+    from_account = next(
+        (acc for acc in SAMPLE_ACCOUNTS if acc["id"] == from_account_id), None)
 
     if not from_account or from_account["balance"] < amount:
         return "Insufficient funds or invalid account.", 400
 
     if transfer_type == "internal":
         to_account_id = int(request.form.get('toInternalAccount'))
-        to_account = next((acc for acc in SAMPLE_ACCOUNTS if acc["id"] == to_account_id), None)
+        to_account = next(
+            (acc for acc in SAMPLE_ACCOUNTS if acc["id"] == to_account_id), None)
         if not to_account:
             return "Invalid target account.", 400
 
         # Process internal transfer (mock behavior)
         from_account["balance"] -= amount
         to_account["balance"] += amount
-        print(f"Internal Transfer: ${amount} from {from_account['name']} to {to_account['name']}")
+        print(
+            f"Internal Transfer: ${amount} from {
+                from_account['name']} to {
+                to_account['name']}")
 
     elif transfer_type == "external":
         to_account = request.form.get('toExternalAccount')
@@ -115,9 +138,12 @@ def process_transfer():
 
         # Process external transfer (mock behavior)
         from_account["balance"] -= amount
-        print(f"External Transfer: ${amount} from {from_account['name']} to External Account {to_account}. Notes: {notes}")
+        print(
+            f"External Transfer: ${amount} from {
+                from_account['name']} to External Account {to_account}. Notes: {notes}")
 
     return "Transfer processed successfully!"
+
 
 @app.route('/history')
 @login_required
@@ -133,9 +159,11 @@ def transaction_history():
     else:
         return render_template('history.html')
 
+
 @app.route('/register')
 def register():
     return render_template('registration.html')
+
 
 @app.route('/admin')
 @login_required
@@ -143,10 +171,12 @@ def admin():
     # Pass the fake user data to the template
     return render_template('admin.html', users=FAKE_USERS)
 
+
 @app.route('/logout')
 def logout():
     session.pop("username", None)
     return redirect(url_for("login"))
+
 
 @app.route('/admin/transaction', methods=['POST'])
 @login_required
@@ -159,19 +189,23 @@ def add_transaction():
     transaction_type = request.form.get("type")
 
     # Find the account by ID
-    account = next((acc for acc in SAMPLE_ACCOUNTS if acc["id"] == account_id), None)
+    account = next(
+        (acc for acc in SAMPLE_ACCOUNTS if acc["id"] == account_id),
+        None)
     if not account:
         return f"Account with ID {account_id} not found.", 404
 
     # Apply the transaction
     if transaction_type == "deposit":
         account["balance"] += amount
-        message = f"Successfully deposited ${amount:.2f} to account {account_id}."
+        message = f"Successfully deposited ${
+            amount:.2f} to account {account_id}."
     elif transaction_type == "withdraw":
         if account["balance"] < amount:
             return f"Insufficient funds in account {account_id}.", 400
         account["balance"] -= amount
-        message = f"Successfully withdrew ${amount:.2f} from account {account_id}."
+        message = f"Successfully withdrew ${
+            amount:.2f} from account {account_id}."
 
     return render_template("admin.html", users=FAKE_USERS, message=message)
 
