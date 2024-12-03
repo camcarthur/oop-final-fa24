@@ -5,7 +5,7 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 # existing database and create a new one
 
 """ default user after installing postgres is "postgres"
-    password was not working for me so i had to reset to "pass" using the postgres shell
+    password was not working for me so i had to reset to "pass" using the postgres shell  # noqa: E501
     sudo -u postgres psql
     ALTER USER postgres WITH PASSWORD 'pass'; """
 
@@ -20,7 +20,21 @@ NEW_USER = "banking_user"
 NEW_PASSWORD = "secure_password"
 
 
-def create_database_and_user():
+def create_database_and_user() -> None:
+    """
+    Creates a PostgreSQL database and user.
+
+    This function:
+    Drops and recreates the specified database (`NEW_DATABASE`).
+    Drops and recreates the specified user (`NEW_USER`).
+    Grants full privileges on the database to the user.
+
+    Raises:
+        psycopg2.Error: If any database operation fails.
+
+    Returns:
+        None
+    """
     try:
         connection = psycopg2.connect(
             dbname="postgres",
@@ -49,14 +63,14 @@ def create_database_and_user():
             print(f"User '{NEW_USER}' dropped successfully.")
 
         cursor.execute(
-            f"CREATE USER {NEW_USER} WITH PASSWORD '{NEW_PASSWORD}';")  # creates user
+            f"CREATE USER {NEW_USER} WITH PASSWORD '{NEW_PASSWORD}';")  # creates user  # noqa: E501
         print(f"User '{NEW_USER}' created successfully.")
 
         # grant privilages stuff
         cursor.execute(
             f"GRANT ALL PRIVILEGES ON DATABASE {NEW_DATABASE} TO {NEW_USER};")
         print(
-            f"Granted privileges on database '{NEW_DATABASE}' to user '{NEW_USER}'.")
+            f"Granted privileges on database '{NEW_DATABASE}' to user '{NEW_USER}'.")  # noqa: E501
 
         cursor.close()
         connection.close()

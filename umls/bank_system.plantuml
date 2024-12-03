@@ -1,0 +1,17 @@
+@startuml
+scale 1
+title "UML Class Diagram - BankSystem"
+
+class BankSystem {
+  .. Instance Variables ..
+  - _accounts: Dict[int, Dict[int, float]]
+  .. Instance Methods ..
+  + __init__(): None
+  + accounts: Dict[int, Dict[int, float]]
+  + accounts(value: Dict[int, Dict[int, float]]): None
+  + get_user_accounts(user_id: int): List[Dict[int, float]]
+  + deposit(user_id: int, account_id: int, amount: float): None
+  + withdraw(user_id: int, account_id: int, amount: float): None
+  + transfer_funds(user_id: int, from_account: int, to_account: int, amount: float): None
+}
+@enduml

@@ -1,19 +1,16 @@
-from database.models import Base
+import os
+import sys
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import sys
-import os
+from database.models import Base
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-# Database connection URL
-DATABASE_URL = "postgresql://banking_user:secure_password@localhost:5432/banking_db"
+DATABASE_URL = "postgresql://banking_user:secure_password@localhost:5432/banking_db"  # noqa: E501
 
-# Create the database engine
 engine = create_engine(DATABASE_URL)
 
-Base.metadata.create_all(engine)  # Create all the tables
+Base.metadata.create_all(engine)
 
-# Define the session factory
 Session = sessionmaker(bind=engine)
 session = Session()

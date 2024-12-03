@@ -1,0 +1,40 @@
+@startuml
+scale 1
+title "UML Class Diagram - Command and Derived Classes"
+
+abstract class Command {
+  .. Instance Methods ..
+  + execute(): None {abstract}
+}
+
+class DepositCommand {
+  .. Instance Variables ..
+  - _bank_system: BankSystem
+  - _user_id: int
+  - _account_id: int
+  - _amount: float
+  .. Instance Methods ..
+  + __init__(bank_system: BankSystem, user_id: int, account_id: int, amount: float): None
+  + amount: float
+  + amount(value: float): None
+  + execute(): None
+}
+
+class WithdrawCommand {
+  .. Instance Variables ..
+  - _bank_system: BankSystem
+  - _user_id: int
+  - _account_id: int
+  - _amount: float
+  .. Instance Methods ..
+  + __init__(bank_system: BankSystem, user_id: int, account_id: int, amount: float): None
+  + amount: float
+  + amount(value: float): None
+  + execute(): None
+}
+
+Command <|-- DepositCommand
+Command <|-- WithdrawCommand
+DepositCommand --> BankSystem: uses >
+WithdrawCommand --> BankSystem: uses >
+@enduml

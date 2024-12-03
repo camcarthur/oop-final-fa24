@@ -18,6 +18,11 @@ endif
 	$(PLANTUML) umls/logical.plantuml
 	$(PLANTUML) umls/physical.plantuml
 	$(PLANTUML) umls/process.plantuml
+	$(PLANTUML) umls/logic.plantuml
+	$(PLANTUML) umls/bank_system.plantuml
+	$(PLANTUML) umls/user_auth.plantuml
+	$(PLANTUML) umls/bank_app.plantuml
+	$(PLANTUML) umls/command.plantuml
 	@echo "UML diagrams created and saved in umls folder"
 
 .PHONY: build_db
@@ -25,9 +30,13 @@ build-db:
 	@cd database && python3 setup_db.py && python3 -m database.init_db
 # if you get a Makefile error just run ```python3 -m database.init_db``` by itself
 
-.PHONY: run
+.PHONY: run-debug
 run:
 	@cd logic && export FLASK_APP=main:app && export PYTHONPATH=.. && flask run --debug
+
+.PHONY: run
+run:
+	@cd logic && export FLASK_APP=main:app && export PYTHONPATH=.. && flask run
 
 .PHONY: test
 run-test:
