@@ -15,28 +15,28 @@ class TestModels(unittest.TestCase):
     """Test suite for models in the database."""
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         """Set up the database and session for testing."""
         cls.engine = create_engine(DATABASE_URL)
         Base.metadata.create_all(cls.engine)
         cls.Session = sessionmaker(bind=cls.engine)
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         """Tear down the database after all tests."""
         Base.metadata.drop_all(cls.engine)
         cls.engine.dispose()
 
-    def setUp(self):
+    def setUp(self) -> None:
         """Start a new session for each test."""
         self.session = self.Session()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         """Rollback the session to ensure a clean state."""
         self.session.rollback()
         self.session.close()
 
-    def test_user_creation(self):
+    def test_user_creation(self) -> None:
         """Test creating a user."""
         user = User(
             username="testuser",
@@ -52,7 +52,7 @@ class TestModels(unittest.TestCase):
         self.assertEqual(queried_user.email, "test@example.com")
         self.assertEqual(queried_user.role, Role.user)
 
-    def test_account_creation(self):
+    def test_account_creation(self) -> None:
         """Test creating an account and linking it to a user."""
         user = User(
             username="accountuser",
@@ -79,7 +79,7 @@ class TestModels(unittest.TestCase):
         # Verify relationship
         self.assertEqual(queried_account.user.username, "accountuser")
 
-    def test_transaction_creation(self):
+    def test_transaction_creation(self) -> None:
         """Test creating a transaction and linking it to an account."""
         user = User(
             username="transactionuser",

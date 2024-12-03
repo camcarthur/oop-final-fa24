@@ -20,7 +20,21 @@ NEW_USER = "banking_user"
 NEW_PASSWORD = "secure_password"
 
 
-def create_database_and_user():
+def create_database_and_user() -> None:
+    """
+    Creates a PostgreSQL database and user.
+
+    This function:
+    Drops and recreates the specified database (`NEW_DATABASE`).
+    Drops and recreates the specified user (`NEW_USER`).
+    Grants full privileges on the database to the user.
+
+    Raises:
+        psycopg2.Error: If any database operation fails.
+
+    Returns:
+        None
+    """
     try:
         connection = psycopg2.connect(
             dbname="postgres",
