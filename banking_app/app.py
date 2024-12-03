@@ -3,22 +3,22 @@ from functools import wraps
 from datetime import timedelta
 
 app = Flask(__name__)
-app.secret_key = ".env"  # Replace with a secure random key
+app.secret_key = ".env"
 app.permanent_session_lifetime = timedelta(minutes=30) 
-# Placeholder for accounts
+# Test accounts
 SAMPLE_ACCOUNTS = [
     {"id": 1, "name": "Checking Account", "balance": 2500.00},
     {"id": 2, "name": "Savings Account", "balance": 15000.00},
     {"id": 3, "name": "Business Account", "balance": 50000.00},
 ]
 
-# Placeholder for login credentials
+# Test credentials for login
 SAMPLE_USERS = {
     "test":"test",
     "admin":"admin",
 }
 
-# Placeholder for database (admin page)
+# Payload for admin page 
 FAKE_USERS = [
     {"id": 1, "username": "colinm", "email": "email@1.com", "num_accounts": "5", "balance": 42500.00},
     {"id": 2, "username": "jakep", "email": "email@2.com", "num_accounts": "8", "balance": 2315000.00},
@@ -42,9 +42,9 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        # Check credentials
+        # Authenticate user
         if username in SAMPLE_USERS and SAMPLE_USERS[username] == password:
-            session["username"] = username  # Store username in session
+            session["username"] = username  # cache username
             if username == "admin":
                 return redirect(url_for("admin"))
             else:
@@ -56,8 +56,8 @@ def login():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    # Mock user and transactions
-    user_name = "John Doe"  # Placeholder username
+    # Mock 
+    user_name = "Colin McArthur"  # Placeholder username
     transactions = [
         {"date": "08/03/2024", "type": "expense", "description": "Marty S.A.S.", "amount": 852.04},
         {"date": "02/03/2024", "type": "expense", "description": "Groceries", "amount": 120.50},
@@ -68,7 +68,7 @@ def dashboard():
     ]
     pending_transfers = 3  # Placeholder for pending transfers
 
-    # Total balance (summed from SAMPLE_ACCOUNTS)
+    # Summed up balance
     total_balance = sum(account["balance"] for account in SAMPLE_ACCOUNTS)
 
     return render_template(
@@ -82,7 +82,6 @@ def dashboard():
 @app.route('/transfer')
 @login_required
 def transfer():
-    # Pass sample accounts to the template
     return render_template('transfer.html', accounts=SAMPLE_ACCOUNTS)
 
 @app.route('/transfer', methods=['POST'])
@@ -92,7 +91,6 @@ def process_transfer():
     transfer_type = request.form.get('transferType')
     amount = float(request.form.get('amount'))
 
-    # Retrieve account details (mock logic; replace with database query)
     from_account = next((acc for acc in SAMPLE_ACCOUNTS if acc["id"] == from_account_id), None)
 
     if not from_account or from_account["balance"] < amount:
@@ -104,7 +102,7 @@ def process_transfer():
         if not to_account:
             return "Invalid target account.", 400
 
-        # Process internal transfer (mock behavior)
+        # Process internal transfer
         from_account["balance"] -= amount
         to_account["balance"] += amount
         print(f"Internal Transfer: ${amount} from {from_account['name']} to {to_account['name']}")
@@ -113,7 +111,7 @@ def process_transfer():
         to_account = request.form.get('toExternalAccount')
         notes = request.form.get('notesExternal')
 
-        # Process external transfer (mock behavior)
+        # Process external transfer 
         from_account["balance"] -= amount
         print(f"External Transfer: ${amount} from {from_account['name']} to External Account {to_account}. Notes: {notes}")
 
@@ -123,7 +121,7 @@ def process_transfer():
 @login_required
 def transaction_history():
     filter_type = request.args.get("type")
-    # Filter logic can be added here once the database is implemented
+    # Basic filtering (replace with db)
     if filter_type == "debit":
         return "Filtered for Expenses (Debit)"
     elif filter_type == "credit":
@@ -140,7 +138,7 @@ def register():
 @app.route('/admin')
 @login_required
 def admin():
-    # Pass the fake user data to the template
+    # Pass user data 
     return render_template('admin.html', users=FAKE_USERS)
 
 @app.route('/logout')
@@ -158,12 +156,12 @@ def add_transaction():
     amount = float(request.form.get("amount"))
     transaction_type = request.form.get("type")
 
-    # Find the account by ID
+    # Find account by account_id
     account = next((acc for acc in SAMPLE_ACCOUNTS if acc["id"] == account_id), None)
     if not account:
         return f"Account with ID {account_id} not found.", 404
 
-    # Apply the transaction
+    # Transfer with error handling
     if transaction_type == "deposit":
         account["balance"] += amount
         message = f"Successfully deposited ${amount:.2f} to account {account_id}."
