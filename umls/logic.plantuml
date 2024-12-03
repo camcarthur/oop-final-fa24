@@ -1,0 +1,87 @@
+@startuml
+scale 1
+title "UML Class Diagram - BankApp and Related Classes"
+
+class BankApp {
+  .. Instance Variables ..
+  - _instance: BankApp
+  - _app: Flask
+  - _db_session: ORM_Session
+  - _bank_system: BankSystem
+  - _user_auth: UserAuth
+  .. Instance Methods ..
+  + __new__(cls: Type[BankApp], *args, **kwargs): BankApp
+  + __init__(): None
+  + app: Flask
+  + db_session: ORM_Session
+  + bank_system: BankSystem
+  + user_auth: UserAuth
+  + setup_routes(): None
+  + add_admin_user(): None
+}
+
+class Command {
+  .. Instance Methods ..
+  + execute(): None {abstract}
+}
+
+class DepositCommand {
+  .. Instance Variables ..
+  - _bank_system: BankSystem
+  - _user_id: int
+  - _account_id: int
+  - _amount: float
+  .. Instance Methods ..
+  + __init__(bank_system: BankSystem, user_id: int, account_id: int, amount: float): None
+  + amount: float
+  + amount(value: float): None
+  + execute(): None
+}
+
+class WithdrawCommand {
+  .. Instance Variables ..
+  - _bank_system: BankSystem
+  - _user_id: int
+  - _account_id: int
+  - _amount: float
+  .. Instance Methods ..
+  + __init__(bank_system: BankSystem, user_id: int, account_id: int, amount: float): None
+  + amount: float
+  + amount(value: float): None
+  + execute(): None
+}
+
+class BankSystem {
+  .. Instance Variables ..
+  - _accounts: Dict[int, Dict[int, float]]
+  .. Instance Methods ..
+  + __init__(): None
+  + accounts: Dict[int, Dict[int, float]]
+  + accounts(value: Dict[int, Dict[int, float]]): None
+  + get_user_accounts(user_id: int): List[Dict[int, float]]
+  + deposit(user_id: int, account_id: int, amount: float): None
+  + withdraw(user_id: int, account_id: int, amount: float): None
+  + transfer_funds(user_id: int, from_account: int, to_account: int, amount: float): None
+}
+
+class UserAuth {
+  .. Instance Variables ..
+  - _bank_system: BankSystem
+  - _session: Session
+  .. Instance Methods ..
+  + __init__(bank_system: BankSystem, session: Session): None
+  + bank_system: BankSystem
+  + bank_system(value: BankSystem): None
+  + session: Session
+  + session(value: Session): None
+  + register_user(username: str, email: str, password: str): Dict[str, Union[bool, str]]
+}
+
+BankApp --> BankSystem: uses >
+BankApp --> UserAuth: uses >
+UserAuth --> BankSystem: uses >
+Command <|-- DepositCommand
+Command <|-- WithdrawCommand
+DepositCommand --> BankSystem: uses >
+WithdrawCommand --> BankSystem: uses >
+@enduml

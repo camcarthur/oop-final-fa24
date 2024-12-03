@@ -1,0 +1,18 @@
+@startuml
+scale 1
+title "UML Class Diagram - UserAuth"
+
+class UserAuth {
+  .. Instance Variables ..
+  - _bank_system: BankSystem
+  - _session: Session
+  .. Instance Methods ..
+  + __init__(bank_system: BankSystem, session: Session): None
+  + bank_system: BankSystem
+  + bank_system(value: BankSystem): None
+  + session: Session
+  + session(value: Session): None
+  + register_user(username: str, email: str, password: str): Dict[str, Union[bool, str]]
+}
+UserAuth --> BankSystem: uses >
+@enduml
