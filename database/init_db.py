@@ -1,6 +1,10 @@
-from database.models import Base
+from models import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Database connection URL
 DATABASE_URL = "postgresql://banking_user:secure_password@localhost:5432/banking_db"
