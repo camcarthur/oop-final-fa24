@@ -1,4 +1,5 @@
 PLANTUML = java -jar ~/plantuml.jar
+DOCS = docs
 
 .PHONY: all
 all: check-style fix-style check-type run-test create-uml
@@ -68,3 +69,12 @@ check-type:
 	@echo "Checking type with mypy"
 	@mypy --disallow-untyped-defs --strict .
 	@echo "Success"
+
+.PHONY: create-doc-folder
+create-doc-folder:
+	@mkdir -p $(DOCS)
+
+.PHONY: create-docs
+create-docs: create-doc-folder
+	pdoc -o ./docs logic/bank_system.py logic/main.py logic/user_auth.py database/init_db.py database/models.py database/setup_db.py
+	@echo "html docs created and saved in $(DOCS)"
